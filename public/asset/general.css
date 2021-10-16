@@ -1,0 +1,64 @@
+:root{
+    --color-principal:#246DE3;
+    --color-secundario: #ffff;
+    --color-panel: #FBFAFB;
+}
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+.navegacion{
+    background: var(--color-principal);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    bottom: 0;
+    overflow: hidden;
+}
+.navegacion .mi-logo{
+    height: 50px;
+}
+.navegacion ul{
+    list-style: none; 
+}
+.navegacion ul > li {
+    margin-left: 10px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    padding: 10px 15px;
+    position: relative;
+}
+.navegacion ul li a{
+    color: var(--color-secundario);
+    display: flex;
+    align-items: center;
+    font-weight: 200;
+    font-size: 15px;
+    text-decoration: none;
+    position: relative;
+}
+.navegacion ul li a .icono{
+    width: 35px;
+}
+.navegacion ul li a .title {
+    width: calc(100% - 35px);
+}
+.navegacion ul .hover-menu:hover {
+    background: var(--color-secundario);
+}
+.navegacion ul .hover-menu:hover a {
+    color: var(--color-principal);
+}
+.panel{
+    width: calc(100% - 300px);
+    margin-left: 300px;
+    padding: 10px;
+    background: var(--color-panel);
+}
+.sub-menu {
+    margin-left: 15px;
+    /* display: none; */
+}
