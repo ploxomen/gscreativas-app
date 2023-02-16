@@ -115,7 +115,7 @@
                         </a>
                     </li>
                     <li class="hover-menu">
-                        <a href="{{route('usuarioRol')}}">
+                        <a href="{{route('listarUsuario')}}">
                             <span class="icono material-icons">add</span>
                             <span class="title">Usuario</span>
                         </a>

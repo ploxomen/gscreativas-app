@@ -25,6 +25,8 @@ class Usuario extends Controller
     }
     public function listarUsuarios()
     {
-        return view('intranet.users.lista');
+        $roles = Rol::all();
+        $areas = Area::all();
+        return view('intranet.users.lista',compact("roles","areas"));
     }
 }

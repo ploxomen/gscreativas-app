@@ -10,7 +10,7 @@
     <section class="p-3">
         <div class="mb-4">
             <div class="m-auto" style="max-width: 300px;">
-                <img src="{{asset('asset/img/modulo/roles.png')}}" alt="Imagen de 4 roles" width="100px" class="img-fluid d-block m-auto">
+                <img src="{{asset('asset/img/modulo/roles.png')}}" alt="Imagen de 4 roles" width="120px" class="img-fluid d-block m-auto">
                 <h4 class="text-center text-primary my-2">Administración de roles</h4>
             </div>
         </div>

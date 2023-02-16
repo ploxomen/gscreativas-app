@@ -133,3 +133,7 @@ button small i{
     user-select: none;
     pointer-events: none;
 }
+.form-required > label::after {
+    content: "*";
+    color: red;
+}

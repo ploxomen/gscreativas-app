@@ -34,8 +34,8 @@ Route::prefix('intranet')->group(function(){
     });
     Route::prefix('usuarios')->group(function(){
         Route::post('get-area',[Usuario::class,'getArea']);
-        Route::get('agregar',[Usuario::class,'agregarUsuario'])->name('users');
-        Route::get('listar',[Usuario::class,'listarUsuarios'])->name('listarUsuario');
+        Route::get('/',[Usuario::class,'listarUsuarios'])->name('listarUsuario');
+        // Route::get('listar',[Usuario::class,'listarUsuarios'])->name('listarUsuario');
         Route::get('rol',[Rol::class,'viewRol'])->name('usuarioRol');
         Route::get('area', [Area::class, 'viewArea'])->name('usuarioArea');
         Route::post('rol/accion', [Rol::class, 'accionesRoles']);
