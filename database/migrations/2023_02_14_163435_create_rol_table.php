@@ -16,6 +16,7 @@ class CreateRolTable extends Migration
         Schema::create('rol', function (Blueprint $table) {
             $table->id();
             $table->string("nombreRol");
+            $table->string("claseIcono")->nullable();
             $table->dateTimeTz("fechaCreada");
             $table->dateTimeTz("fechaActualizada");
         });

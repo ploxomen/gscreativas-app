@@ -1,7 +1,7 @@
 $(document).ready(function(){
     $.extend(true,$.fn.dataTable.defaults,{
         responsive: true,
-        autoWidth: true,
+        autoWidth: false,
         processing: true,
         serverSide: true,
         pageLength: 25,

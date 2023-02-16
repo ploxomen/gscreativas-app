@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class Rol extends Model
 {
-    protected $table = 'rol';
-    public $timestamps = false;
-    protected $fillable = ['rol'];
+    public $table = "rol";
+    protected $fillable = ['nombreRol','claseIcono'];
+    const CREATED_AT = 'fechaCreada';
+    const UPDATED_AT = 'fechaActualizada';
 
-    public static function getRolArea($id_area)
+    protected function serializeDate($date)
     {
-        return DB::select('CALL sp_get_roles_area(?)',[$id_area]);
+        return $date->format('d/m/Y h:i a');
     }
 }

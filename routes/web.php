@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Producto\MisProductos;
 use App\Http\Controllers\Usuario;
+use App\Http\Controllers\Usuario\Area;
 use App\Http\Controllers\Usuario\Rol;
 use App\Http\Controllers\ventas;
 use Illuminate\Support\Facades\Route;
@@ -35,7 +36,10 @@ Route::prefix('intranet')->group(function(){
         Route::post('get-area',[Usuario::class,'getArea']);
         Route::get('agregar',[Usuario::class,'agregarUsuario'])->name('users');
         Route::get('listar',[Usuario::class,'listarUsuarios'])->name('listarUsuario');
-        Route::get('role',[Rol::class,'viewRol'])->name('usuarioRol');
+        Route::get('rol',[Rol::class,'viewRol'])->name('usuarioRol');
+        Route::get('area', [Area::class, 'viewArea'])->name('usuarioArea');
+        Route::post('rol/accion', [Rol::class, 'accionesRoles']);
+        Route::post('area/accion', [Area::class, 'accionesArea']);
 
     });
     Route::prefix('ventas')->group(function(){

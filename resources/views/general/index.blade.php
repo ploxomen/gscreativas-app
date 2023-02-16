@@ -37,7 +37,7 @@
                         <span class="title">Inicio</span>
                     </a>
                 </li>  
-                <li class="hover-menu">
+                {{-- <li class="hover-menu">
                     <a href="javascript:void(0)" class="active-panel">
                         <span class="icono material-icons">groups</span>
                         <span class="title">Usuario</span>
@@ -57,7 +57,7 @@
                             <span class="title">Mis usuarios</span>
                         </a>
                     </li>
-                </ul>
+                </ul> --}}
                  <li class="hover-menu">
                     <a href="javascript:void(0)" class="active-panel">
                         <span class="icono material-icons">groups</span>
@@ -70,12 +70,6 @@
                         <a href="{{route('addProduct')}}">
                             <span class="icono material-icons">add</span>
                             <span class="title">Registrar producto</span>
-                        </a>
-                    </li>
-                    <li class="hover-menu">
-                        <a href="{{route('usuarioRol')}}">
-                            <span class="icono material-icons">add</span>
-                            <span class="title">Rol</span>
                         </a>
                     </li>
                     <li class="hover-menu">
@@ -99,27 +93,33 @@
                             <span class="title">Registrar venta</span>
                         </a>
                     </li>
-                    {{-- <li class="hover-menu">
-                        <a href="">
+                </ul>
+                <li class="hover-menu">
+                    <a href="javascript:void(0)" class="active-panel">
+                        <span class="icono material-icons">groups</span>
+                        <span class="title">Usuarios</span>
+                        <span class="material-icons">expand_more</span>
+                    </a>
+                </li>
+                <ul class="sub-menu">
+                    <li class="hover-menu">
+                        <a href="{{route('usuarioRol')}}">
                             <span class="icono material-icons">add</span>
-                            <span class="title">Registrar venta (R)</span>
-                        </a>
-                    </li> --}}
-                    {{-- <li class="hover-menu">
-                        <a href="">
-                            <span class="title">Preventas</span>
+                            <span class="title">Rol</span>
                         </a>
                     </li>
                     <li class="hover-menu">
-                        <a href="">
-                            <span class="title">Ventas del día</span>
+                        <a href="{{route('usuarioArea')}}">
+                            <span class="icono material-icons">add</span>
+                            <span class="title">Area</span>
                         </a>
                     </li>
                     <li class="hover-menu">
-                        <a href="">
-                            <span class="title">Ventas en general</span>
+                        <a href="{{route('usuarioRol')}}">
+                            <span class="icono material-icons">add</span>
+                            <span class="title">Usuario</span>
                         </a>
-                    </li> --}}
+                    </li>
                 </ul>
                 <li>
                     <a href="{{route('login')}}">

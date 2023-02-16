@@ -118,6 +118,7 @@ table thead tr th{
     background: rgba(206, 206, 206, 0.247);
 }
 .cuerpo-panel{
+    height: calc(100vh - 57px);
     width: calc(100% - 300px);
     overflow-y: auto;
     margin-left: 300px;
@@ -126,4 +127,9 @@ table thead tr th{
 }
 .legend-add{
     font-size: 17px;
+}
+button small,
+button small i{
+    user-select: none;
+    pointer-events: none;
 }

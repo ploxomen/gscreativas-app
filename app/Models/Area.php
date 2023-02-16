@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Area extends Model
 {
     protected $table = 'area';
-    protected $primaryKey = 'id';
-    public $timestamps = false;
-    protected $fillable = ['area'];
-
+    protected $fillable = ['nombreArea'];
+    const CREATED_AT = 'fechaCreada';
+    const UPDATED_AT = 'fechaActualizada';
     
+    protected function serializeDate($date)
+    {
+        return $date->format('d/m/Y h:i a');
+    }
     
 }

@@ -27,9 +27,9 @@ class CreateUsuariosTable extends Migration
             $table->char("sexo",1);
             $table->integer("estado");
             $table->unsignedBigInteger("areaFk");
+            $table->foreign("areaFk")->references("id")->on("area");
             $table->dateTimeTz("fechaCreada");
             $table->dateTimeTz("fechaActualizada");
-            $table->foreign("areaFk")->references("id")->on("area");
         });
     }
 
