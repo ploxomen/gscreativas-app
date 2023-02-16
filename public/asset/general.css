@@ -1,13 +1,51 @@
 :root{
-    --color-principal:#246DE3;
+    --color-principal:#5D44F8;
     --color-secundario: #ffff;
-    --color-panel: #FBFAFB;
+    --color-panel: #F5F5F7;
+    --color-letra-parrafo: #B3A6AD;
+    --color-letra-title: #6C757D;
+    --bg-p-red: #FA5C7C;
+    --bg-p-blue: #727CF5;
+    --bg-p-green:#0ACF97;
+    --bg-p-black: #6C757D;
 }
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
+}
+label{
+    color: var(--color-letra-title);
+    font-size: 15px;
+}
+.btn-import{
+    display: flex;
+    outline: none;
+    justify-content: center;
+    border-radius: 50%;
+    width: 50px;
+    align-items: center;
+}
+form label{
+    font-weight: bold !important;
+}
+.btn-import .material-icons{
+    font-size: 23px;
+    color: var(--color-secundario);
+}
+.btn-primary{
+    background: var(--bg-p-blue) !important;
+}
+.btn-danger{
+    background: var(--bg-p-red) !important;
+}
+form fieldset legend{
+    color: var(--color-letra-title) !important;
+}
+table thead tr th{
+    color: var(--color-letra-title) !important;
+    font-weight: 500;
 }
 .navegacion{
     background: var(--color-principal);
@@ -55,10 +93,37 @@
 .panel{
     width: calc(100% - 300px);
     margin-left: 300px;
-    padding: 10px;
-    background: var(--color-panel);
 }
 .sub-menu {
     margin-left: 15px;
     /* display: none; */
+}
+.info-person{
+    display: flex;
+    justify-content: space-between;
+}
+.btn-info-menu{
+    outline: none;
+    border: none;
+    padding: 10px;
+    background: transparent;
+    transition: background .3s ease-in-out;
+    cursor: pointer;
+}
+.btn-info-menu span{
+    color: var(--color-principal);
+    font-size: 30px;
+}
+.btn-info-menu:hover{
+    background: rgba(206, 206, 206, 0.247);
+}
+.cuerpo-panel{
+    width: calc(100% - 300px);
+    overflow-y: auto;
+    margin-left: 300px;
+    padding: 20px 10px;
+    background:var(--color-panel);
+}
+.legend-add{
+    font-size: 17px;
 }
