@@ -17,4 +17,8 @@ class Area extends Model
         return $date->format('d/m/Y h:i a');
     }
     
+    public function usuarios()
+    {
+        return $this->hasMany(User::class,'areaFk');
+    }
 }

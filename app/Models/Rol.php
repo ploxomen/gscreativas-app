@@ -15,4 +15,8 @@ class Rol extends Model
     {
         return $date->format('d/m/Y h:i a');
     }
+    public function usuarios()
+    {
+        return $this->belongsToMany(User::class,'usuario_rol','rolFk','usuarioFk');
+    }
 }

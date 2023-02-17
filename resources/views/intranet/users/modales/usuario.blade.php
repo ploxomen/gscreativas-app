@@ -48,11 +48,11 @@
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label for="direction">Telefono</label>
-                    <input type="tel"  name="apellidos" id="last_name" class="form-control">
+                    <input type="tel"  name="telefono" id="last_name" class="form-control">
                 </div>
                 <div class="form-group col-12">
                     <label for="direction">Direccion</label>
-                    <input type="text"  name="apellidos" id="last_name" class="form-control">
+                    <input type="text"  name="direccion" id="last_name" class="form-control">
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label for="txtFechaNacimiento">Fecha Nacimiento</label> 
@@ -61,7 +61,7 @@
                 <div class="form-group col-12 col-md-6">
                     <label for="idSexo">Sexo</label> 
                     <select name="sexo" id="idSexo" class="form-control">
-                        <option value="Ninguno">Ninguno</option>
+                        <option value="">Ninguno</option>
                         <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
                     </select>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="form-group col-12 col-md-6 col-lg-4 form-required">
                     <label for="areas">Área</label>
-                    <select name="id_area" class="form-control" id="areas" required>
+                    <select name="areaFk" class="form-control" id="areas" required>
                         <option></option>
                         @foreach ($areas as $area)
                             <option value="{{$area->id}}">{{$area->nombreArea}}</option>
@@ -83,15 +83,16 @@
                 </div>
                 <div class="form-group col-12 col-md-6 col-lg-8 form-required">
                     <label for="roles">Roles</label>
-                    <select name="roles" class="form-control" multiple id="roles" required>
+                    <select name="roles[]" class="form-control" multiple id="roles" required>
                         @foreach ($roles as $rol)
                             <option value="{{$rol->id}}">{{$rol->nombreRol}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group col-12 form-required">
-                    <label for="txtContrasena">Contraseña temporal</label> 
+                    <label for="txtContrasena">Contraseña</label> 
                     <input type="text" required class="form-control" name="contrasena" id="txtContrasena" minlength="8" value="sistema{{date('Y')}}">
+                    <small class="form-text text-muted">Esta contraseña es temporal hasta que el usuario ingrese por primera vez</small>
                 </div>
                 <input type="submit" hidden id="btnFrmEnviar">
             </form>

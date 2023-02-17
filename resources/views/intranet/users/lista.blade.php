@@ -23,7 +23,7 @@
         <form action="" class="row">
             <div class="form-group col-12 col-md-6 col-xl-3">
                 <label for="cbArea">Área:</label>
-                <select name="area" id="cbArea" class="form-control">
+                <select name="area" id="cbArea" class="form-control select2">
                     <option value="todos">Todos</option>
                     @foreach ($areas as $area)
                         <option value="{{$area->id}}">{{$area->nombreArea}}</option>
@@ -32,7 +32,7 @@
             </div>
             <div class="form-group col-12 col-md-6 col-xl-3">
                 <label for="cbRol">Rol:</label>
-                <select name="rol" id="cbRol" class="form-control">
+                <select name="rol" id="cbRol" class="form-control select2">
                     <option value="todos">Todos</option>
                     @foreach ($roles as $rol)
                         <option value="{{$rol->id}}">{{$rol->nombreRol}}</option>
@@ -45,7 +45,7 @@
     </div>
     <div class="bg-white p-3">
         <div class="table-responsive">
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered tabla-sm" id="tablaUsuarios">
                 <thead>
                     <tr>
                         <th>N°</th>
@@ -57,19 +57,6 @@
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Jean Pier Carrasco Tamariz</td>
-                        <td>924777699</td>
-                        <td>jeanpi.jpct@gmail.com</td>
-                        <td>Sistemas</td>
-                        <td class="text-success">Activo</td>
-                        <td>
-                            <button class="btn btn-danger btn-sm"><span class="material-icons">delete</span></button>
-                        </td>
-                    </tr>
-                </tbody>
             </table>
         </div>
     </div>

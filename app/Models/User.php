@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,15 +11,29 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    public $table = "usuarios";
+    const UPDATED_AT = "fechaActualizada";
+    const CREATED_AT = "fechaCreada";
+
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'nombres',
+        'apellidos',
+        'contrasena',
+        'correo',
+        'tipoDocumento',
+        'nroDocumento',
+        'telefono',
+        'celular',
+        'direccion',
+        'fechaCumple',
+        'sexo',
+        'estado',
+        'areaFk'
     ];
 
     /**
@@ -29,16 +42,17 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'contrasena',
+        'recordarToken',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function area()
+    {
+        return $this->belongsTo(Area::class,'areaFk');
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Rol::class,'usuario_rol','usuarioFk','rolFk');
+    }
 }

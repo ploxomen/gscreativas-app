@@ -20,4 +20,9 @@ class General{
             body: dato
         }).then(response => response.json())
     }
+    cargandoPeticion($boton,claseIcono,deshabilitar){
+        const btn = $boton.querySelector("i");
+        btn.disabled = deshabilitar;
+        btn.className = claseIcono;
+    }
 }

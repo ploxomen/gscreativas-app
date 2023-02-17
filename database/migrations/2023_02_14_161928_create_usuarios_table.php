@@ -16,18 +16,18 @@ class CreateUsuariosTable extends Migration
         Schema::create('usuarios', function (Blueprint $table) {
             $table->id();
             $table->string("correo");
-            $table->string("tipoDocumento");
-            $table->string("nroDocumento");
+            $table->string("tipoDocumento")->nullable();
+            $table->string("nroDocumento")->nullable();
             $table->string("nombres");
             $table->string("apellidos");
             $table->string("contrasena");
-            $table->string("telefono");
-            $table->string("celular");
-            $table->string("direccion");
-            $table->date("fechaCumple");
-            $table->string("recordarToken");
-            $table->char("sexo",1);
-            $table->integer("estado");
+            $table->string("telefono")->nullable();
+            $table->string("celular")->nullable();
+            $table->string("direccion")->nullable();
+            $table->date("fechaCumple")->nullable();
+            $table->string("recordarToken")->nullable();
+            $table->char("sexo",1)->nullable();
+            $table->integer("estado")->default(2);
             $table->unsignedBigInteger("areaFk");
             $table->foreign("areaFk")->references("id")->on("area");
             $table->dateTimeTz("fechaCreada");
