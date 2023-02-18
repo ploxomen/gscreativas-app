@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="csrf-token" content="{{csrf_token()}}">
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{asset('iconos/fontawesome/css/all.css')}}">
     <link rel="stylesheet" href="{{asset('asset/general.css')}}">
     <link rel="stylesheet" href="{{asset('library/bootstrap/bootstrap.min.css')}}">
@@ -28,7 +29,18 @@
 <body>
     <div class="contenedor">
         <div class="navegacion">
-            <div class="mi-logo">
+            <div class="mi-logo"></div>
+            <div class="mi-perfil d-flex p-3" style="gap: 10px;">
+                @php
+                    $urlPerfil = auth()->user()->sexo == "F" ? "mujer" : "hombre";
+                @endphp
+                <div>
+                    <img src="{{asset('asset/img/modulo/perfil_' . $urlPerfil .'.png')}}" width="70px">
+                </div>
+                <div class="info-perfil">
+                    <span class="d-block pt-3">{{auth()->user()->nombres}}</span>
+                    <span class="py-2" style="color: rgb(218, 218, 218)">{{auth()->user()->area->nombreArea}}</span>
+                </div>
             </div>
             <ul class="menu">
                 <li class="">
@@ -141,12 +153,31 @@
                     <button class="btn-info-menu">
                         <span class="material-icons">search</span>
                     </button>
-                </div>
-                <div class="box-my">
                     <button class="btn-info-menu">
                         <span class="material-icons">notifications</span>
                     </button>
-                    <img src="" alt="">
+                </div>
+                <div class="box-my">
+                    <div class="info-perfil">
+                        <span class="d-block">{{auth()->user()->nombres}}</span>
+                        <span class="py-2" style="color: rgb(145, 145, 145);">{{auth()->user()->area->nombreArea}}</span>
+                    </div>
+                    <div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-outline-light dropdown-toggle toggle-split" data-toggle="dropdown" aria-expanded="false">
+                                <img src="{{asset('asset/img/modulo/perfil_' . $urlPerfil .'.png')}}" width="30px">
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <h6 class="dropdown-header" id="lista_roles_index">Roles</h6>
+                                @foreach (auth()->user()->roles as $role)
+                                    <a class="dropdown-item {{$role->activo === 1 ? "" : "active"}}" href="#">{{$role->nombreRol}}</a>
+                                @endforeach
+                                <div class="dropdown-divider"></div>
+                                <a href="{{route('cerrarSesion')}}" class="dropdown-item"><span>Cerrar sesión</span></a>
+                            </div>
+                          </div>
+                    </div>
+                    
                 </div>
                
             </div>

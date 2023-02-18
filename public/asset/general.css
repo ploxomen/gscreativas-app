@@ -1,5 +1,5 @@
 :root{
-    --color-principal:#5D44F8;
+    --color-principal:#2A4153;
     --color-secundario: #ffff;
     --color-panel: #F5F5F7;
     --color-letra-parrafo: #B3A6AD;
@@ -8,6 +8,7 @@
     --bg-p-blue: #727CF5;
     --bg-p-green:#0ACF97;
     --bg-p-black: #6C757D;
+    --width-panel: 280px;
 }
 * {
     padding: 0;
@@ -52,9 +53,13 @@ table thead tr th{
     position: fixed;
     top: 0;
     left: 0;
-    width: 300px;
+    width: var(--width-panel);
     bottom: 0;
     overflow: hidden;
+}
+.mi-perfil .info-perfil{
+    color: white;
+    font-size: 12px;
 }
 .navegacion .mi-logo{
     height: 50px;
@@ -63,10 +68,9 @@ table thead tr th{
     list-style: none; 
 }
 .navegacion ul > li {
-    margin-left: 10px;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
-    padding: 10px 15px;
+    padding: 6px 15px;
     position: relative;
 }
 .navegacion ul li a{
@@ -74,15 +78,16 @@ table thead tr th{
     display: flex;
     align-items: center;
     font-weight: 200;
-    font-size: 15px;
+    font-size: 12px;
     text-decoration: none;
     position: relative;
 }
-.navegacion ul li a .icono{
-    width: 35px;
-}
 .navegacion ul li a .title {
     width: calc(100% - 35px);
+}
+.menu .material-icons{
+    font-size: 20px;
+    margin-right: 10px;
 }
 .navegacion ul .hover-menu:hover {
     background: var(--color-secundario);
@@ -91,8 +96,8 @@ table thead tr th{
     color: var(--color-principal);
 }
 .panel{
-    width: calc(100% - 300px);
-    margin-left: 300px;
+    width: calc(100% - var(--width-panel));
+    margin-left: var(--width-panel);
 }
 .sub-menu {
     margin-left: 15px;
@@ -111,7 +116,7 @@ table thead tr th{
     cursor: pointer;
 }
 .btn-info-menu span{
-    color: var(--color-principal);
+    color: var(--bg-p-blue);
     font-size: 30px;
 }
 .btn-info-menu:hover{
@@ -119,9 +124,9 @@ table thead tr th{
 }
 .cuerpo-panel{
     height: calc(100vh - 57px);
-    width: calc(100% - 300px);
+    width: calc(100% - var(--width-panel));
     overflow-y: auto;
-    margin-left: 300px;
+    margin-left: var(--width-panel);
     padding: 20px 10px;
     background:var(--color-panel);
 }
@@ -136,4 +141,14 @@ button small i{
 .form-required > label::after {
     content: "*";
     color: red;
+}
+.box-my{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    padding-right: 10px;
+}
+.dropdown-menu a{
+    font-size: 13px;
 }

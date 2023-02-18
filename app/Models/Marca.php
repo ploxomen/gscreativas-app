@@ -9,10 +9,10 @@ class Marca extends Model
 {
     protected $table = 'marca';
     public $timestamps = false;
-    protected $fillable = ['marca','estado'];
+    protected $fillable = ['nombreMarca'];
 
     public static function obtenerMarcas(){
-        return Marca::where(['estado' => 1])->orderBy('marca','asc')->get();
+        return Marca::orderBy('nombreMarca','asc')->get();
     }
     public static function agregarMarca($valor)
     {

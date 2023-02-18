@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Unidades extends Model
 {
-    protected $table = 'units';
+    protected $table = 'presentacion';
     public $timestamps = false;
-    protected $fillable = ['unidades','abreviado','created_at','update_at','user_create','estado'];
+    protected $fillable = ['nombrePresentacion','siglas'];
 
     public static function obtenerUnidades()
     {
-        return Unidades::where(['estado' => 1])->get();
+        return Unidades::all();
     }
 }

@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Productos extends Model
 {
-    protected $table = 'products';
+    protected $table = 'productos';
     public $timestamps = false;
 
     public static function totalProductos()
     {
-        return Productos::where(['status' => 1])->count();
+        return Productos::count();
     }
 }
