@@ -66,19 +66,23 @@ function loadPage(){
         },
         ]
     });
+    let idUsuario = null;
     const btnGuardar = document.querySelector("#btnGuardarFrm");
     btnGuardar.onclick = e => document.querySelector("#btnFrmEnviar").click();
     const frmUsuario = document.querySelector("#frmUsuario");
     frmUsuario.addEventListener("submit",async function(e){
         e.preventDefault();
-        gen.cargandoPeticion(btnGuardar,'fas fa-spinner fa-spin',true);
+        gen.cargandoPeticion(btnGuardar, gen.claseSpinner,true);
         let datos = new FormData(this);
-        datos.append("acciones","agregar");
+        datos.append("acciones", !idUsuario ? "agregar" : "editar");
+        if (idUsuario){
+            datos.append("idUsuario",idUsuario);
+        }
         try {
             const response = await gen.funcfetch("usuarios/accion",datos);
             gen.cargandoPeticion(btnGuardar,'fas fa-save',false);
             if(response.session){
-                return alertify.alert([...alertaSesion],() => {window.location.reload()});
+                return alertify.alert([...gen.alertaSesion],() => {window.location.reload()});
             }
             if(response.error){
                 return alertify.error("error al guardar el usuario");
@@ -88,16 +92,88 @@ function loadPage(){
             }
             alertify.alert("Mensaje",response.success);
             $('#usurioModal').modal("hide");
+            tablaUsuariosData.draw();
         } catch (error) {
             gen.cargandoPeticion(btnGuardar,'fas fa-save',false);
             alertify.error("error al guardar el usuario");
         }
-    })
-
+    });
+    $('#usurioModal').on('hidden.bs.modal', function (event) {
+        frmUsuario.reset();
+        $('#usurioModal .select2').val("").trigger("change");
+        boxContrasena.querySelector("input").disabled = false;
+        boxContrasena.hidden = false;
+        idUsuario = null;
+        btnGuardar.querySelector("span").textContent = "Guardar";
+    });
+    const boxContrasena = document.querySelector("#boxContrasena");
+    tablaUsuarios.onclick = async function(e){
+        if (e.target.classList.contains("btn-outline-info")){
+            btnGuardar.querySelector("span").textContent = "Editar";
+            let datos = new FormData();
+            datos.append("acciones","mostrarEditar");
+            datos.append("idUsuario",e.target.dataset.usuario);
+            try {
+                gen.cargandoPeticion(e.target, gen.claseSpinner, true);
+                const response = await gen.funcfetch("usuarios/accion",datos);
+                gen.cargandoPeticion(e.target, 'fas fa-pencil-alt', false);
+                if (response.session) {
+                    return alertify.alert([...gen.alertaSesion], () => { window.location.reload() });
+                }
+                idUsuario = e.target.dataset.usuario;
+                for (const key in response.success) {
+                    if (Object.hasOwnProperty.call(response.success, key)) {
+                        const valor = response.success[key];
+                        const dom = document.querySelector("#idValorModal" + key);
+                        if(!dom || !valor){
+                            continue;
+                        }
+                        if (key == "roles"){
+                            $(dom).val(valor.map(va => va.id)).trigger("change");
+                            continue;
+                        }
+                        dom.value = valor;
+                    }
+                }
+                $('#idValorModalareaFk').trigger("change");
+                boxContrasena.querySelector("input").disabled = true;
+                boxContrasena.hidden = true;
+                $('#usurioModal').modal("show");
+            } catch (error) {
+                gen.cargandoPeticion(e.target, 'fas fa-pencil-alt', false);
+                console.error(error);
+                alertify.error("error al obtener el usuario");
+            }
+        }
+        if (e.target.classList.contains("btn-outline-danger")) {
+            alertify.confirm("Alerta","¿Estás seguro de eliminar a este usuario?",async ()=>{
+                let datos = new FormData();
+                datos.append("acciones", "eliminar");
+                datos.append("idUsuario", e.target.dataset.usuario);
+                try {
+                    gen.cargandoPeticion(e.target, gen.claseSpinner, true);
+                    const response = await gen.funcfetch("usuarios/accion", datos);
+                    gen.cargandoPeticion(e.target, 'fas fa-trash-alt', false);
+                    if (response.session) {
+                        return alertify.alert([...gen.alertaSesion], () => { window.location.reload() });
+                    }
+                    tablaUsuariosData.draw();
+                    return alertify.success(response.success);
+                } catch (error) {
+                    gen.cargandoPeticion(e.target, 'fas fa-trash-alt', false);
+                    console.error(error);
+                    alertify.error("error al eliminar el usuario");
+                }
+            },()=>{});
+            
+        }
+    }
     $('.select2').select2({
         theme: 'bootstrap',
         width: '100%',
-    }).on("change",function(e){
+        placeholder: "seleccione una opción"
+    });
+    $('#cbArea, #cbRol').on("change",function(e){
         tablaUsuariosData.draw();
     });
 }

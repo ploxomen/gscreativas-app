@@ -56,9 +56,11 @@ function loadPage(){
             data.append("accion","mostarEditar");
             data.append("rol",e.target.dataset.rol);
             try {
+                general.cargandoPeticion(e.target, general.claseSpinner, true);
                 const response = await general.funcfetch("rol/accion",data);
+                general.cargandoPeticion(e.target, 'fas fa-pencil-alt', false);
                 if(response.session){
-                    return alertify.alert([...alertaSesion],() => {window.location.reload()});
+                    return alertify.alert([...general.alertaSesion],() => {window.location.reload()});
                 }
                 if(response.success){
                     alertify.success("pendiente para editar");
@@ -69,6 +71,7 @@ function loadPage(){
                     btnGuardarForm.querySelector("span").textContent = "Editar";
                 }
             } catch (error) {
+                general.cargandoPeticion(e.target, 'fas fa-pencil-alt', false);
                 idRol = null;
                 console.error(error);
                 alertify.error("error al obtener ")
@@ -76,7 +79,31 @@ function loadPage(){
 
         }
         if (e.target.classList.contains("btn-outline-danger")) {
-
+            alertify.confirm("Alerta","¿Deseas eliminar este rol?",async () => {
+                let data = new FormData();
+                data.append("accion", "eliminar");
+                data.append("rol", e.target.dataset.rol);
+                try {
+                    general.cargandoPeticion(e.target, general.claseSpinner, true);
+                    const response = await general.funcfetch("rol/accion",data);
+                    general.cargandoPeticion(e.target, 'fas fa-trash-alt', true);
+                    if (response.session) {
+                        return alertify.alert([...general.alertaSesion], () => { window.location.reload() });
+                    }
+                    if(response.alerta){
+                        return alertify.alert("Alerta",response.alerta);
+                    }
+                    if (response.error) {
+                        return alertify.alert("Alerta", response.error);
+                    }
+                    tablaRolDataTable.draw();
+                    return alertify.success(response.success);
+                } catch (error) {
+                    general.cargandoPeticion(e.target, 'fas fa-trash-alt', true);
+                    console.error(error);
+                    alertify.error('error al eliminar el rol');
+                }
+            },() => {})
         }
     }
     formRol.onreset = function(e){
@@ -91,9 +118,11 @@ function loadPage(){
             datos.append("rolId", idRol);
         }
         try {
+            general.cargandoPeticion(btnGuardarForm, general.claseSpinner, true);
             const response = await general.funcfetch("rol/accion", datos);
+            general.cargandoPeticion(e.target, 'fas fa-save', false);
             if (response.session) {
-                return alertify.alert([...alertaSesion], () => { window.location.reload() });
+                return alertify.alert([...general.alertaSesion], () => { window.location.reload() });
             }
             if (response.success) {
                 alertify.success(response.success);
@@ -102,6 +131,7 @@ function loadPage(){
                 idRol = null;
             }
         } catch (error) {
+            general.cargandoPeticion(btnGuardarForm, 'fas fa-save', false);
             idRol = null;
             console.error(error);
             alertify.error(idRol != null ? "error al editar el rol" : 'error al agregar un rol')

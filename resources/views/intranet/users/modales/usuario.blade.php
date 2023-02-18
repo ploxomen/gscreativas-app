@@ -16,8 +16,8 @@
                     </h5>
                 </div>
                 <div class="form-group col-12 col-md-6">
-                    <label for="type_document">Tipo de documento</label>
-                    <select name="tipoDocumento" id="type_document" class="form-control">
+                    <label for="idValorModaltipoDocumento">Tipo de documento</label>
+                    <select name="tipoDocumento" id="idValorModaltipoDocumento" class="form-control">
                         <option value="">Ninguno</option>
                         <option value="D.N.I">D.N.I</option>
                         <option value="CARNET DE EXTRANJERÍA">CARNET DE EXTRANJERÍA</option>
@@ -26,44 +26,44 @@
                     </select>
                 </div>
                 <div class="form-group col-12 col-md-6">
-                    <label for="n_document">N° de documento</label>
-                    <input type="tel" name="nroDocumento" id="n_document" class="form-control">
+                    <label for="idValorModalnroDocumento">N° de documento</label>
+                    <input type="tel" name="nroDocumento" id="idValorModalnroDocumento" class="form-control">
                 </div>
                 <div class="form-group col-12 col-md-6 form-required">
-                    <label for="name">Nombres</label>
-                    <input type="text" required name="nombres" id="name" class="form-control">
+                    <label for="idValorModalnombres">Nombres</label>
+                    <input type="text" required name="nombres" id="idValorModalnombres" class="form-control">
                 </div>
                 <div class="form-group col-12 col-md-6 form-required">
-                    <label for="last_name">Apellidos</label>
-                    <input type="text" required name="apellidos" id="last_name" class="form-control">
+                    <label for="idValorModalapellidos">Apellidos</label>
+                    <input type="text" required name="apellidos" id="idValorModalapellidos" class="form-control">
                 </div>
                 <div class="form-group col-12 form-required">
-                    <label for="email">Correo</label> 
-                    <input type="email" required class="form-control" name="correo" id="email">
+                    <label for="idValorModalcorreo">Correo</label> 
+                    <input type="email" required class="form-control" name="correo" id="idValorModalcorreo">
                     <small class="form-text text-muted">Con este correo se inicia sesión en el sistema</small>
                 </div>
                 <div class="form-group col-12 col-md-6">
-                    <label for="phone">Celular</label> 
-                    <input type="tel" class="form-control" name="celular" id="phone">
+                    <label for="idValorModalcelular">Celular</label> 
+                    <input type="tel" class="form-control" name="celular" id="idValorModalcelular">
                 </div>
                 <div class="form-group col-12 col-md-6">
-                    <label for="direction">Telefono</label>
-                    <input type="tel"  name="telefono" id="last_name" class="form-control">
+                    <label for="idValorModaltelefono">Telefono</label>
+                    <input type="tel"  name="telefono" id="idValorModaltelefono" class="form-control">
                 </div>
                 <div class="form-group col-12">
-                    <label for="direction">Direccion</label>
-                    <input type="text"  name="direccion" id="last_name" class="form-control">
+                    <label for="idValorModaldireccion">Direccion</label>
+                    <input type="text"  name="direccion" id="idValorModaldireccion" class="form-control">
                 </div>
                 <div class="form-group col-12 col-md-6">
-                    <label for="txtFechaNacimiento">Fecha Nacimiento</label> 
-                    <input type="date" class="form-control" name="fechaNacimiento" id="txtFechaNacimiento">
+                    <label for="idValorModalsexo">Fecha Nacimiento</label> 
+                    <input type="date" class="form-control" name="fechaNacimiento" id="idValorModalsexo">
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label for="idSexo">Sexo</label> 
-                    <select name="sexo" id="idSexo" class="form-control">
+                    <select name="sexo" id="idValorModal" class="form-control">
                         <option value="">Ninguno</option>
-                        <option value="Masculino">Masculino</option>
-                        <option value="Femenino">Femenino</option>
+                        <option value="H">Masculino</option>
+                        <option value="M">Femenino</option>
                     </select>
                 </div>
                 <div class="col-12">
@@ -73,8 +73,8 @@
                     </h5>
                 </div>
                 <div class="form-group col-12 col-md-6 col-lg-4 form-required">
-                    <label for="areas">Área</label>
-                    <select name="areaFk" class="form-control" id="areas" required>
+                    <label for="idValorModalareaFk">Área</label>
+                    <select name="areaFk" class="form-control select2" id="idValorModalareaFk" required>
                         <option></option>
                         @foreach ($areas as $area)
                             <option value="{{$area->id}}">{{$area->nombreArea}}</option>
@@ -82,14 +82,14 @@
                     </select>
                 </div>
                 <div class="form-group col-12 col-md-6 col-lg-8 form-required">
-                    <label for="roles">Roles</label>
-                    <select name="roles[]" class="form-control" multiple id="roles" required>
+                    <label for="idValorModalroles">Roles</label>
+                    <select name="roles[]" class="form-control select2" multiple id="idValorModalroles" required>
                         @foreach ($roles as $rol)
                             <option value="{{$rol->id}}">{{$rol->nombreRol}}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-12 form-required">
+                <div class="form-group col-12 form-required" id="boxContrasena">
                     <label for="txtContrasena">Contraseña</label> 
                     <input type="text" required class="form-control" name="contrasena" id="txtContrasena" minlength="8" value="sistema{{date('Y')}}">
                     <small class="form-text text-muted">Esta contraseña es temporal hasta que el usuario ingrese por primera vez</small>

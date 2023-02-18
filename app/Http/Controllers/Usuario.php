@@ -9,6 +9,7 @@ use App\Models\UsuarioRol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class Usuario extends Controller
@@ -48,14 +49,6 @@ class Usuario extends Controller
             break;
             case 'obtener' :
                 $usuarios = new User();
-
-
-                // $usuarios = User::with('roles')->get();
-                // foreach ($usuarios as $usuario) {
-                //     dd($usuario->roles->nombreRol);
-                // }
-                // dd(User::where('estado',2)->roles()->get());
-                
                 if($request->rol != 'todos'){
                     $usuarios = Rol::find($request->rol)->usuarios()->with('area:id,nombreArea')->select("nombres","apellidos","celular","estado","correo","usuarios.id","areaFk");
                 }else{
@@ -68,17 +61,56 @@ class Usuario extends Controller
                     return $usuario->nombres . ' ' . $usuario->apellidos;
                 })->toJson();
             break;
-            default:
-            
+            case 'mostrarEditar':
+                $usuario = User::with('roles:id')->select("nombres", "apellidos", "celular", "estado", "correo", "usuarios.id", "areaFk","tipoDocumento","nroDocumento","telefono","celular","direccion","fechaCumple","sexo")->where("usuarios.id", $request->idUsuario)->first();
+                return response()->json(['success' => $usuario]);
+            break;
+            case 'editar':
+                $usuario = User::find($request->idUsuario);
+                DB::beginTransaction();
+                try {
+                    $usuario->roles()->detach();
+                    foreach ($request->roles as $rol) {
+                        $usuario->roles()->attach($rol);
+                    }
+                    $datos = $request->all();
+                    unset($datos['acciones']);
+                    unset($datos['roles']);
+                    $usuario->update($datos);
+                    DB::commit();
+                    return response()->json(['success' => 'Usuario actualizado con éxito']);
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    return response()->json(['error' => $th->getMessage(), 'codigo' => $th->getCode()]);
+                }
+            break;
+            case 'eliminar':
+                $usuario = User::find($request->idUsuario);
+                DB::beginTransaction();
+                try {
+                    $usuario->roles()->detach();
+                    $usuario->delete();
+                    DB::commit();
+                    return response()->json(['success' => 'Usuario eliminado con éxito']);
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    return response()->json(['error' => $th->getMessage(), 'codigo' => $th->getCode()]);
+                }
             break;
         }
-            
-        
     }
     public function listarUsuarios()
     {
         $roles = Rol::all();
         $areas = Area::all();
         return view('intranet.users.lista',compact("roles","areas"));
+    }
+    public function retaurarContra() : View
+    {
+        return view('cambioContra');
+    }
+    public function loginView() : View
+    {
+        return view('login');
     }
 }

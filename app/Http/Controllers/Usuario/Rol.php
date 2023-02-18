@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Usuario;
 use App\Http\Controllers\Controller;
 use App\Models\Rol as ModelsRol;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -35,6 +36,22 @@ class Rol extends Controller
             case 'editarRol':
                 ModelsRol::where('id',$request->rolId)->update(['nombreRol' => $request->rol, 'claseIcono' => $request->icono]);
                 return response()->json(['success' => 'rol actualizado correctamente']);
+            break;
+            case 'eliminar':
+                $modeloRol = ModelsRol::find($request->rol)->usuarios();
+                DB::beginTransaction();
+                try {
+                    if ($modeloRol->count() > 0) {
+                        return response()->json(['alerta' => 'No se puede eliminar el rol, primero elimine los usuarios asociados a el.']);
+                    }
+                    $modeloRol->detach();
+                    ModelsRol::find($request->rol)->delete();
+                    DB::commit();
+                    return response()->json(['success' => 'rol eliminado correctamente']);
+                } catch (\Throwable $th) {
+                    DB::rollBack();
+                    return response()->json(['error' => $th->getMessage(), 'codigo' => $th->getCode()]);
+                }
             break;
         }
     }

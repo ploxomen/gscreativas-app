@@ -44,7 +44,7 @@
                         </label>
                     </div>
                     <div class="input-file" style="text-align: right;">
-                        <a href="{{route('users')}}" class="restore-pass">¿Olvidaste tu contraseña?</a>
+                        <a class="restore-pass">¿Olvidaste tu contraseña?</a>
                     </div>
                     <div>
                         <button type="submit" class="button-login"><span class="material-icons">login</span>Ingresar</button>

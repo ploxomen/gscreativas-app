@@ -18,10 +18,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-})->name('login');
 Route::prefix('intranet')->group(function(){
+    Route::get('login',[Usuario::class, 'loginView'])->name('viewLogin');
     Route::get('inicio',function(){
         return view('intranet.home');
     })->name('home');
@@ -45,6 +43,8 @@ Route::prefix('intranet')->group(function(){
     Route::prefix('ventas')->group(function(){
         Route::get('agregar',[ventas::class,'viewAgregarVenta'])->name('agregarVentas');
     });
+    Route::get("usuario/restaurar",[Usuario::class,'retaurarContra'])->name('restaurarContra');
+    Route::post("usuario/restaurar", [Usuario::class, 'retaurarContra']);
     
 });
 
