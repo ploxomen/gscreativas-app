@@ -122,7 +122,7 @@
                     </li>
                 </ul>
                 <li>
-                    <a href="{{route('login')}}">
+                    <a href="{{route('cerrarSesion')}}">
                         <span class="icono material-icons">logout</span>
                         <span class="title">Cerrar sesión</span>
                     </a>

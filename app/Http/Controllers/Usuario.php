@@ -7,6 +7,7 @@ use App\Models\Rol;
 use App\Models\User;
 use App\Models\UsuarioRol;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
@@ -107,10 +108,91 @@ class Usuario extends Controller
     }
     public function retaurarContra() : View
     {
-        return view('cambioContra');
+        if (isset($_COOKIE['login_first'])) {
+            return view('cambioContra');
+        }
+        return redirect(route('login'));
     }
-    public function loginView() : View
+    public function loginView()
     {
+        if (isset($_COOKIE['login_first'])) {
+            return redirect(route('restaurarContra'));
+        }
         return view('login');
+    }
+    public function autenticacion(Request $request)
+    {
+        if(!$request->ajax()){
+            return ['error' => 'No se pudo procesar la petición'];
+        }
+        $user = User::select("password")->where(['correo' => $request->correo, 'estado' => 2])->first();
+        if (!empty($user)) {
+            if (Hash::check($request->password, $user->password)) {
+                setcookie('login_first', $request->correo, time() + 3600, '/');
+                $message = ['success' => true];
+                return response()->json($message);
+            }
+        }
+        $credenciales = $request->only("correo","password");
+        $credenciales['estado'] = 1;
+        $message = [];
+        if (Auth::attempt($credenciales,$request->has('recordar') ? true : false)) {
+            $request->session()->regenerate();
+            User::find(Auth::id())->roles()->limit(1)->update(['activo' => 1]);
+            $message = ['success' => true];
+        } else {
+            $message = ['not_user' => true];
+        }
+        return response()->json($message);
+    }
+    public function logoauth(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect(route('login'));
+    }
+    public function validarAutenticacion()
+    {
+        if(!Auth::check()){
+            return ['session' => 'sin autenticar'];
+        }
+        if (isset($_COOKIE['login_first'])) {
+            return ['sessionFirst' => 'usuario primera vez'];
+        }
+    }
+    public function restaurarContrasena(Request $request)
+    {
+        if (!$request->ajax()) {
+            return response()->json(['error' => 'No se pudo procesar la petición']);
+        }
+        if (!isset($_COOKIE['login_first'])) {
+            return response()->json(['noExistCookie' => true]);
+        }
+        if($request->password !== $request->password2){
+            return response()->json(['error' => 'Las contraseñas no coinciden']);
+        }
+        if(strlen($request->password) < 8){
+            return response()->json(['error' => 'La contraseña debe tener al menos 8 caracteres']);
+        }
+        $usuario = User::where('correo', $_COOKIE['login_first'])->first();
+        $usuario->roles()->update(['activo' => 1]);
+        $usuario->update(['password' => Hash::make($request->password),'estado' => 1]);
+        if (Auth::attempt(['correo' => $_COOKIE['login_first'], 'password' => $request->password],true)) {
+            $request->session()->regenerate();
+        }
+        unset($_COOKIE['login_first']);
+        setcookie('login_first', null, time() - 3600, '/');
+        return response()->json(['success' => 'Contraseña restaurada con éxito']);
+    }
+    public function validarAutenticacionView()
+    {
+        $resultado = $this->validarAutenticacion();
+        if(isset($resultado['sessionFirst'])){
+            return redirect(route('restaurarContra'));
+        }
+        if(isset($resultado['session'])){
+            return redirect(route('login'));
+        }
     }
 }

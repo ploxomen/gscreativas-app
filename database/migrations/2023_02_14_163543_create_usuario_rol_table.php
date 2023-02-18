@@ -17,6 +17,7 @@ class CreateUsuarioRolTable extends Migration
             $table->id();
             $table->unsignedBigInteger("usuarioFk");
             $table->unsignedBigInteger("rolFk");
+            $table->integer('activo')->default(0);
             $table->dateTimeTz("fechaCreada");
             $table->dateTimeTz("fechaActualizada");
             $table->foreign("usuarioFk")->references("id")->on("usuarios");

@@ -2,18 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
 
     public $table = "usuarios";
     const UPDATED_AT = "fechaActualizada";
     const CREATED_AT = "fechaCreada";
+    protected $rememberTokenName = 'recordarToken';
 
     /**
      * The attributes that are mass assignable.

@@ -9,17 +9,22 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <meta name="csrf-token" content="{{csrf_token()}}">
+    <link rel="stylesheet" href="{{asset('library/alertify/alertify.min.css')}}">
+    <script src="{{asset('library/alertify/alertify.min.js')}}"></script>
+    <script src="{{asset('asset/general.js')}}"></script>
     <link rel="stylesheet" href="{{asset('iconos/fontawesome/css/all.css')}}">
     <link rel="stylesheet" href="{{asset('asset/general.css')}}">
     <link rel="stylesheet" href="{{asset('library/bootstrap/bootstrap.min.css')}}">
     <script src="{{asset('library/jquery/external/jquery/jquery.js')}}"></script>
     <script src="{{asset('library/bootstrap/bootstrap.min.js')}}"></script>
     <link rel="stylesheet" href="{{asset('asset/cambioContrasena.css')}}">
+
+    <script src="{{asset('asset/auth/restaurar.js')}}"></script>
     <title>Restaurar Contraseña</title>
 </head>
 <body>
     <div class="pagina-centro p-4">
-        <form action="" class="row border p-2 rounded form-restore">
+        <form id="frmLogin" class="row border p-2 rounded form-restore">
             <div class="form-group col-12">
                 <img src="{{asset('asset/img/modulo/password.png')}}" alt="Candado abierto" class="d-block img-fluid m-auto" width="150px">
             </div>
@@ -28,18 +33,18 @@
             </div>
             <div class="form-group col-12 form-required ">
                 <label for="">Contraseña</label>
-                <input type="password" required class="form-control" minlength="8" required>
+                <input type="password" name="password" required class="form-control" minlength="8" required>
             </div>
             <div class="form-group col-12 form-required">
                 <label for="">Repetir contraseña</label>
-                <input type="password" required class="form-control" minlength="8" required>
+                <input type="password" name="password2" required class="form-control" minlength="8" required>
             </div>
             <div class="form-group col-12 text-center">
                 <button type="submit" class="btn btn-outline-primary">
                     <i class="fas fa-paper-plane"></i>
                     <span>Ingresar</span>
                 </button>
-                <a href="{{route('viewLogin')}}" class="btn btn-outline-danger">
+                <a href="{{route('login')}}" class="btn btn-outline-danger">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Salir</span>
                 </a>

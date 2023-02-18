@@ -18,8 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('intranet')->group(function(){
-    Route::get('login',[Usuario::class, 'loginView'])->name('viewLogin');
+Route::middleware('auth')->prefix('intranet')->group(function(){
     Route::get('inicio',function(){
         return view('intranet.home');
     })->name('home');
@@ -33,7 +32,7 @@ Route::prefix('intranet')->group(function(){
     Route::prefix('usuarios')->group(function(){
         Route::post('accion',[Usuario::class,'getArea']);
         Route::get('/',[Usuario::class,'listarUsuarios'])->name('listarUsuario');
-        // Route::get('listar',[Usuario::class,'listarUsuarios'])->name('listarUsuario');
+        Route::get('cerrar/sesion', [Usuario::class, 'logoauth'])->name('cerrarSesion');
         Route::get('rol',[Rol::class,'viewRol'])->name('usuarioRol');
         Route::get('area', [Area::class, 'viewArea'])->name('usuarioArea');
         Route::post('rol/accion', [Rol::class, 'accionesRoles']);
@@ -43,8 +42,12 @@ Route::prefix('intranet')->group(function(){
     Route::prefix('ventas')->group(function(){
         Route::get('agregar',[ventas::class,'viewAgregarVenta'])->name('agregarVentas');
     });
-    Route::get("usuario/restaurar",[Usuario::class,'retaurarContra'])->name('restaurarContra');
-    Route::post("usuario/restaurar", [Usuario::class, 'retaurarContra']);
-    
 });
+Route::middleware(['guest'])->prefix('intranet')->group(function () {
+    Route::get('login', [Usuario::class, 'loginView'])->name('login');
+    Route::get("usuario/restaurar", [Usuario::class, 'retaurarContra'])->name('restaurarContra');
+    Route::post("usuario/autenticacion", [Usuario::class, 'autenticacion']);
+    Route::post("usuario/restaurar", [Usuario::class, 'restaurarContrasena']);
+});
+
 

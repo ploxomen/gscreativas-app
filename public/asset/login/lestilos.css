@@ -114,7 +114,7 @@ body{
     margin: auto;
     transition: background .3s ease-in-out;
 }
-.button-login span{
+.button-login i{
     margin-right: 7px;
 }
 .button-login:hover{
