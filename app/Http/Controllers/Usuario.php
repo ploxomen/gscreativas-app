@@ -32,7 +32,7 @@ class Usuario extends Controller
                     return response()->json(['alerta' => 'El correo ' . $request->email . ' ya se encuentra registrado, por favor intente con otro correo']);
                 }
                 $datos = $request->all();
-                $datos['contrasena'] = Hash::make($datos['contrasena']);
+                $datos['password'] = Hash::make($datos['password']);
                 $datos['estado'] = 2;
                 unset($datos['acciones']);
                 DB::beginTransaction();
@@ -42,7 +42,7 @@ class Usuario extends Controller
                         UsuarioRol::create(['rolFk' => $rol,'usuarioFk' => $usuario->id]);
                     }
                     DB::commit();
-                    return response()->json(['success' => 'Usuario creado correctamente, recuerde que su contraseña temporal es ' . $request->contrasena]);
+                    return response()->json(['success' => 'Usuario creado correctamente, recuerde que su contraseña temporal es ' . $request->password]);
                 } catch (\Throwable $th) {
                     DB::rollBack();
                     return response()->json(['error' => $th->getMessage(),'codigo' => $th->getCode()]);

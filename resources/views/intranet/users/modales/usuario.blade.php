@@ -56,14 +56,14 @@
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label for="idValorModalsexo">Fecha Nacimiento</label> 
-                    <input type="date" class="form-control" name="fechaNacimiento" id="idValorModalsexo">
+                    <input type="date" class="form-control" name="fechaNacimiento" id="idValorModalfechaNacimiento">
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label for="idSexo">Sexo</label> 
-                    <select name="sexo" id="idValorModal" class="form-control">
+                    <select name="sexo" id="idValorModalsexo" class="form-control">
                         <option value="">Ninguno</option>
-                        <option value="H">Masculino</option>
-                        <option value="M">Femenino</option>
+                        <option value="M">Masculino</option>
+                        <option value="F">Femenino</option>
                     </select>
                 </div>
                 <div class="col-12">
@@ -91,7 +91,7 @@
                 </div>
                 <div class="form-group col-12 form-required" id="boxContrasena">
                     <label for="txtContrasena">Contraseña</label> 
-                    <input type="text" required class="form-control" name="contrasena" id="txtContrasena" minlength="8" value="sistema{{date('Y')}}">
+                    <input type="text" required class="form-control" name="password" id="txtContrasena" minlength="8" value="sistema{{date('Y')}}">
                     <small class="form-text text-muted">Esta contraseña es temporal hasta que el usuario ingrese por primera vez</small>
                 </div>
                 <input type="submit" hidden id="btnFrmEnviar">
