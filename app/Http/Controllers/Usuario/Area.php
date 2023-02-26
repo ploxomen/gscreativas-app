@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Usuario;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Usuario;
 use App\Models\Area as ModelsArea;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,9 +12,15 @@ use Yajra\DataTables\Facades\DataTables;
 
 class Area extends Controller
 {
+    private $userControler = null;
+    function __construct()
+    {
+        $this->userControler = new Usuario();
+    }
     public function viewArea(Request $request): View
     {
-        return view("intranet.users.area");
+        $modulos = $this->userControler->obtenerModulos();
+        return view("intranet.users.area",compact("modulos"));
     }
     public function accionesArea(Request $request)
     {

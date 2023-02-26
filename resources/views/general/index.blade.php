@@ -42,98 +42,42 @@
                     <span class="py-2" style="color: rgb(218, 218, 218)">{{auth()->user()->area->nombreArea}}</span>
                 </div>
             </div>
-            <ul class="menu">
-                <li class="">
+            <ul class="menu" id="menuIntranet">
+                <li class="hover-menu {{Request::route()->getName() == 'home' ? 'activesub' : ''}}">
                     <a href="{{route('home')}}" class="menu-prin">
                         <span class="icono material-icons">home</span>
                         <span class="title">Inicio</span>
                     </a>
-                </li>  
-                {{-- <li class="hover-menu">
-                    <a href="javascript:void(0)" class="active-panel">
-                        <span class="icono material-icons">groups</span>
-                        <span class="title">Usuario</span>
-                        <span class="material-icons">expand_more</span>
-                    </a>
                 </li>
-                <ul class="sub-menu">
-                    <li class="hover-menu">
-                        <a href="{{route('users')}}">
+                @php
+                    $grupo = null;
+                @endphp
+                @foreach ($modulos as $k => $modulo)
+                    @if($grupo != $modulo->grupos->id)
+                        <li class="hover-menu display-submenu" role="button" data-toggle="collapse" data-target="#collapse{{$modulo->grupos->id}}" aria-expanded="{{Request::route()->getName() == $modulo->url ? 'true' : 'false'}}" aria-controls="collapse{{$modulo->grupos->id}}">
+                            <a href="javascript:void(0)" class="active-panel">
+                                <span class="icono material-icons">groups</span>
+                                <span class="title">{{$modulo->grupos->grupo}}</span>
+                                <span class="material-icons">expand_more</span>
+                            </a>
+                        </li>
+                        <ul class="sub-menu collapse" id="collapse{{$modulo->grupos->id}}" data-parent="#menuIntranet">
+                        @php
+                            $grupo = $modulo->grupos->id;
+                        @endphp
+                    @endif
+                    <li class="hover-menu {{Request::route()->getName() == $modulo->url ? 'activeli' : ''}}">
+                        <a href="{{route($modulo->url)}}">
                             <span class="icono material-icons">add</span>
-                            <span class="title">Registrar usuarios</span>
+                            <span class="title">{{$modulo->titulo}}</span>
                         </a>
                     </li>
-                    <li class="hover-menu">
-                        <a href="{{route('listarUsuario')}}">
-                            <span class="icono material-icons">add</span>
-                            <span class="title">Mis usuarios</span>
-                        </a>
-                    </li>
-                </ul> --}}
-                 <li class="hover-menu">
-                    <a href="javascript:void(0)" class="active-panel">
-                        <span class="icono material-icons">groups</span>
-                        <span class="title">Productos</span>
-                        <span class="material-icons">expand_more</span>
-                    </a>
-                </li>
-                <ul class="sub-menu">
-                    <li class="hover-menu">
-                        <a href="{{route('addProduct')}}">
-                            <span class="icono material-icons">add</span>
-                            <span class="title">Registrar producto</span>
-                        </a>
-                    </li>
-                    <li class="hover-menu">
-                        <a href="{{route('listarProductos')}}">
-                            <span class="icono material-icons">add</span>
-                            <span class="title">Mis productos</span>
-                        </a>
-                    </li>
-                </ul>
-                <li>
-                    <a href="" class="active-panel">
-                        <span class="icono material-icons">shopping_cart</span>
-                        <span class="title">Ventas</span>
-                        <span class="material-icons">expand_more</span>
-                    </a>
-                </li>
-                <ul class="sub-menu">
-                    <li class="hover-menu">
-                        <a href="{{route('agregarVentas')}}">
-                            <span class="icono material-icons">add</span>
-                            <span class="title">Registrar venta</span>
-                        </a>
-                    </li>
-                </ul>
+                    @if (isset($modulos[$k+1]) && $modulo->grupos->id != $modulos[$k+1]->grupos->id || $modulos->count() == ($k + 1))
+                        </ul>
+                    @endif
+                      
+                @endforeach
                 <li class="hover-menu">
-                    <a href="javascript:void(0)" class="active-panel">
-                        <span class="icono material-icons">groups</span>
-                        <span class="title">Usuarios</span>
-                        <span class="material-icons">expand_more</span>
-                    </a>
-                </li>
-                <ul class="sub-menu">
-                    <li class="hover-menu">
-                        <a href="{{route('usuarioRol')}}">
-                            <span class="icono material-icons">add</span>
-                            <span class="title">Rol</span>
-                        </a>
-                    </li>
-                    <li class="hover-menu">
-                        <a href="{{route('usuarioArea')}}">
-                            <span class="icono material-icons">add</span>
-                            <span class="title">Area</span>
-                        </a>
-                    </li>
-                    <li class="hover-menu">
-                        <a href="{{route('listarUsuario')}}">
-                            <span class="icono material-icons">add</span>
-                            <span class="title">Usuario</span>
-                        </a>
-                    </li>
-                </ul>
-                <li>
                     <a href="{{route('cerrarSesion')}}">
                         <span class="icono material-icons">logout</span>
                         <span class="title">Cerrar sesión</span>
@@ -170,7 +114,7 @@
                             <div class="dropdown-menu dropdown-menu-right">
                                 <h6 class="dropdown-header" id="lista_roles_index">Roles</h6>
                                 @foreach (auth()->user()->roles as $role)
-                                    <a class="dropdown-item {{$role->activo === 1 ? "" : "active"}}" href="#">{{$role->nombreRol}}</a>
+                                    <a class="dropdown-item {{$role->pivot->activo == 1 ? "active" : ""}}" href="{{route('cambiarRol',['rol' => $role->id])}}">{{$role->nombreRol}}</a>
                                 @endforeach
                                 <div class="dropdown-divider"></div>
                                 <a href="{{route('cerrarSesion')}}" class="dropdown-item"><span>Cerrar sesión</span></a>
@@ -187,4 +131,22 @@
         </div>
     </div>
 </body>
+<script>
+    const liActive = document.querySelector(".activeli");
+    if(liActive && !liActive.parentElement.classList.contains("show")){
+        liActive.parentElement.classList.add("show");
+        document.querySelector(`[data-target="#${liActive.parentElement.id}"]`).classList.toggle("activesub");
+        liActive.parentElement.setAttribute("arial-expanded","true");
+    }
+    for (const display of document.querySelectorAll('.display-submenu')) {
+        display.onclick = function(e){
+            for (const display2 of document.querySelectorAll('.display-submenu')) {
+                if(display != display2){
+                    display2.classList.remove("activesub");
+                }
+            }
+            display.classList.toggle("activesub");
+        }
+    }
+</script>
 </html>

@@ -4,11 +4,13 @@
     --color-panel: #F5F5F7;
     --color-letra-parrafo: #B3A6AD;
     --color-letra-title: #6C757D;
+    --hover-menu: #dedede30;
     --bg-p-red: #FA5C7C;
     --bg-p-blue: #727CF5;
     --bg-p-green:#0ACF97;
     --bg-p-black: #6C757D;
     --width-panel: 280px;
+    --activeli : #c8c8c86b;
 }
 * {
     padding: 0;
@@ -64,13 +66,22 @@ table thead tr th{
 .navegacion .mi-logo{
     height: 50px;
 }
+.sub-menu .activeli{
+    background: var(--activeli) !important;
+}
+.menu .activesub{
+    background: #0095ff !important;
+}
+.menu .activesub .title+span{
+    transform: rotate(180deg) !important;
+}
 .navegacion ul{
     list-style: none; 
 }
 .navegacion ul > li {
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
-    padding: 6px 15px;
+    /* border-top-left-radius: 30px; */
+    /* border-bottom-left-radius: 30px; */
+    padding: 10px 15px;
     position: relative;
 }
 .navegacion ul li a{
@@ -90,17 +101,17 @@ table thead tr th{
     margin-right: 10px;
 }
 .navegacion ul .hover-menu:hover {
-    background: var(--color-secundario);
+    background: var(--hover-menu);
 }
 .navegacion ul .hover-menu:hover a {
-    color: var(--color-principal);
+    /* color: var(--color-principal); */
 }
 .panel{
     width: calc(100% - var(--width-panel));
     margin-left: var(--width-panel);
 }
-.sub-menu {
-    margin-left: 15px;
+.sub-menu li{
+    padding-left: 10px !important;
     /* display: none; */
 }
 .info-person{

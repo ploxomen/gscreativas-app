@@ -15,6 +15,11 @@ use Yajra\DataTables\Facades\DataTables;
 
 class Usuario extends Controller
 {
+    public function index(): View
+    {
+        $modulos = $this->obtenerModulos();
+        return view("intranet.home",compact("modulos"));
+    }
     public function agregarUsuario()
     {
         $areas = Area::get();
@@ -102,9 +107,10 @@ class Usuario extends Controller
     }
     public function listarUsuarios()
     {
+        $modulos = $this->obtenerModulos();
         $roles = Rol::all();
         $areas = Area::all();
-        return view('intranet.users.lista',compact("roles","areas"));
+        return view('intranet.users.lista',compact("roles","areas","modulos"));
     }
     public function retaurarContra() : View
     {
@@ -138,12 +144,26 @@ class Usuario extends Controller
         $message = [];
         if (Auth::attempt($credenciales,$request->has('recordar') ? true : false)) {
             $request->session()->regenerate();
-            User::find(Auth::id())->roles()->limit(1)->update(['activo' => 1]);
             $message = ['success' => true];
         } else {
             $message = ['not_user' => true];
         }
         return response()->json($message);
+    }
+    public function obtenerModulos()
+    {
+        if(!Auth::check()){
+            return redirect()->route("logn");
+        }
+        $idUsuario = Auth::id();
+        $roles = User::find($idUsuario);
+        if(!$roles->roles()->where('activo',1)->count()){
+            $rol = $roles->roles()->first();
+            $roles->roles()->where('rolFk', $rol->id)->update(['activo' => 1]);
+        }else{
+            $rol = $roles->roles()->where('activo',1)->first();
+        }
+        return Rol::find($rol->id)->modulos()->get();
     }
     public function logoauth(Request $request)
     {
@@ -161,6 +181,20 @@ class Usuario extends Controller
             return ['sessionFirst' => 'usuario primera vez'];
         }
     }
+    public function cambioRol(Rol $rol)
+    {
+        if (!Auth::check()) {
+            return redirect()->route("login");
+        }
+        $idUsuario = Auth::id();
+        $usuarioRol = User::find($idUsuario);
+        if(!$usuarioRol->roles()->where('rolFk',$rol->id)->count()){
+            return abort(403);
+        }
+        $usuarioRol->roles()->update(['activo' => 0]);
+        $rol->usuarios()->where('usuarioFk',$idUsuario)->update(['activo' => 1]);
+        return redirect()->route('home');
+    }
     public function restaurarContrasena(Request $request)
     {
         if (!$request->ajax()) {
@@ -176,7 +210,6 @@ class Usuario extends Controller
             return response()->json(['error' => 'La contraseña debe tener al menos 8 caracteres']);
         }
         $usuario = User::where('correo', $_COOKIE['login_first'])->first();
-        $usuario->roles()->update(['activo' => 1]);
         $usuario->update(['password' => Hash::make($request->password),'estado' => 1]);
         if (Auth::attempt(['correo' => $_COOKIE['login_first'], 'password' => $request->password],true)) {
             $request->session()->regenerate();

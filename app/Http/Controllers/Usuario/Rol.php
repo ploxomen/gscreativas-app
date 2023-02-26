@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Usuario;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Usuario;
 use App\Models\Rol as ModelsRol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,9 +12,15 @@ use Yajra\DataTables\Facades\DataTables;
 
 class Rol extends Controller
 {
+    private $userControler = null;
+    function __construct()
+    {
+        $this->userControler = new Usuario();
+    }
     public function viewRol(Request $request) : View
     {
-        return view("intranet.users.roles");
+        $modulos = $this->userControler->obtenerModulos();
+        return view("intranet.users.roles",compact("modulos"));
     }
     public function accionesRoles(Request $request)
     {

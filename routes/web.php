@@ -19,28 +19,26 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->prefix('intranet')->group(function(){
-    Route::get('inicio',function(){
-        return view('intranet.home');
-    })->name('home');
-    Route::prefix('productos')->group(function(){
-        Route::get('agregar',[MisProductos::class, 'agregarProducto'])->name('addProduct');
-        Route::post('agregar',[MisProductos::class, 'nuevoProducto']);
-        Route::post('listar',[MisProductos::class, 'obtenerProductos']);
-
-        Route::get('listar',[MisProductos::class,'listaProductos'])->name('listarProductos');
+    Route::get('inicio', [Usuario::class, 'index'])->name('home');
+    Route::prefix('almacen')->group(function () {
+        Route::get('marca', [Usuario::class, 'cambioRol'])->name('admin.marca.index');
+        Route::get('categoria', [Usuario::class, 'listarUsuarios'])->name('admin.categoria.index');
+        Route::get('presentacion', [Usuario::class, 'listarUsuarios'])->name('admin.presentacion.index');
+        Route::get('producto', [Usuario::class, 'listarUsuarios'])->name('admin.producto.index');
+    });
+    Route::prefix('ventas')->group(function () {
+        Route::get('registrar', [Usuario::class, 'cambioRol'])->name('ventas.registrar.index');
     });
     Route::prefix('usuarios')->group(function(){
         Route::post('accion',[Usuario::class,'getArea']);
-        Route::get('/',[Usuario::class,'listarUsuarios'])->name('listarUsuario');
+        Route::get('cambio/rol/{rol}', [Usuario::class, 'cambioRol'])->name('cambiarRol');
+        Route::get('/',[Usuario::class,'listarUsuarios'])->name('admin.usuario.index');
         Route::get('cerrar/sesion', [Usuario::class, 'logoauth'])->name('cerrarSesion');
-        Route::get('rol',[Rol::class,'viewRol'])->name('usuarioRol');
-        Route::get('area', [Area::class, 'viewArea'])->name('usuarioArea');
+        Route::get('rol',[Rol::class,'viewRol'])->name('admin.rol.index');
+        Route::get('area', [Area::class, 'viewArea'])->name('admin.area.index');
         Route::post('rol/accion', [Rol::class, 'accionesRoles']);
         Route::post('area/accion', [Area::class, 'accionesArea']);
 
-    });
-    Route::prefix('ventas')->group(function(){
-        Route::get('agregar',[ventas::class,'viewAgregarVenta'])->name('agregarVentas');
     });
 });
 Route::middleware(['guest'])->prefix('intranet')->group(function () {

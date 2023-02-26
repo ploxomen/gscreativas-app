@@ -24,7 +24,7 @@ class UsuariosSeeder extends Seeder
             'correo' => 'jeanpi.jpct@gmail.com',
             'nombres' => 'Jean Pier',
             'apellidos' => 'Carrasco Tamariz',
-            'password' => Hash::make('jeanpier04'),
+            'password' => bcrypt('jeanpier04'),
             'estado' => 1,
             'areaFk' => 1
         ]);

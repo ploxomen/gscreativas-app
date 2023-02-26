@@ -19,4 +19,8 @@ class Rol extends Model
     {
         return $this->belongsToMany(User::class,'usuario_rol','rolFk','usuarioFk');
     }
+    public function modulos()
+    {
+        return $this->belongsToMany(Modulo::class, 'modulo_roles', 'rolFk', 'moduloFk');
+    }
 }

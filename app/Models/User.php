@@ -51,6 +51,6 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Rol::class,'usuario_rol','usuarioFk','rolFk')->withTimestamps();
+        return $this->belongsToMany(Rol::class,'usuario_rol','usuarioFk','rolFk')->withPivot('activo')->withTimestamps();
     }
 }

@@ -26,6 +26,7 @@ class CreateUsuariosTable extends Migration
             $table->string("direccion")->nullable();
             $table->date("fechaCumple")->nullable();
             $table->string("recordarToken")->nullable();
+            $table->string("urlAvatar",250)->nullable();    
             $table->char("sexo",1)->nullable();
             $table->integer("estado")->default(2);
             $table->unsignedBigInteger("areaFk");
