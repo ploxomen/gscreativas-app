@@ -16,6 +16,7 @@ class CreateMarcaTable extends Migration
         Schema::create('marca', function (Blueprint $table) {
             $table->id();
             $table->string("nombreMarca");
+            $table->integer("estado");
             $table->dateTimeTz("fechaCreada");
             $table->dateTimeTz("fechaActualizada");
         });

@@ -15,6 +15,7 @@ use Yajra\DataTables\Facades\DataTables;
 
 class Usuario extends Controller
 {
+    public $errorPeticion = ["error" => "solicitud invalida"];
     public function index(): View
     {
         $modulos = $this->obtenerModulos();
@@ -153,7 +154,7 @@ class Usuario extends Controller
     public function obtenerModulos()
     {
         if(!Auth::check()){
-            return redirect()->route("logn");
+            return redirect()->route("login");
         }
         $idUsuario = Auth::id();
         $roles = User::find($idUsuario);
@@ -164,6 +165,22 @@ class Usuario extends Controller
             $rol = $roles->roles()->where('activo',1)->first();
         }
         return Rol::find($rol->id)->modulos()->get();
+    }
+    public function validarXmlHttpRequest($urlModulo)
+    {
+        $idUsuario = Auth::id();
+        $usuario = User::where(['estado' => 1,'id' => $idUsuario])->first();
+        if(empty($usuario)){
+            return ['session' => 'usuario no autorizado'];
+        }
+        $rol = User::find($idUsuario)->roles()->where('activo',1)->first();
+        if(empty($rol)){
+            return ['session' => 'rol no activo'];
+        }
+        if(empty($rol->modulos()->where('url',$urlModulo)->first())){
+            return ['session' => 'acceso denegado'];
+        }
+        return ['success' => 'usuario habilitado'];
     }
     public function logoauth(Request $request)
     {

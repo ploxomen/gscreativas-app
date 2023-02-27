@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Producto;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Usuario;
 use App\Models\Area;
 use App\Models\Categoria;
 use App\Models\Marca;
@@ -14,34 +15,20 @@ use Illuminate\Http\Request;
 
 class MisProductos extends Controller
 {
-    public function agregarProducto()
+    private $moduloArea = "admin.producto.index";
+    private $usuarioController;
+    
+    function __construct()
     {
-        $categorias = Categoria::get();
-        $marcas = Marca::obtenerMarcas();
-        $unidades = Unidades::obtenerUnidades();
-        return view('intranet.productos.proagregar',compact('categorias','marcas','unidades'));
+        $this->usuarioController = new Usuario();
     }
-    public function addProduct(Request $request)
+    public function index()
     {
-        if($request->ajax()){
-            // $files = $request->file('productos-img');
-            dd($request->all());
+        $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloArea);
+        if(isset($verif['session'])){
+            return redirect()->route("home"); 
         }
-    }
-    public function obtenerProductos(Request $request)
-    {
-        if($request->ajax()){
-            try {
-                
-               
-            } catch (Exception $ex) {
-                
-            }
-        }
-    }
-    public function listaProductos()
-    {
-        $totalProductos = Productos::totalProductos();
-        return view('intranet.productos.prolistar',compact('totalProductos'));
+        $modulos = $this->usuarioController->obtenerModulos();
+        return view("intranet.productos.proagregar",compact("modulos"));
     }
 }

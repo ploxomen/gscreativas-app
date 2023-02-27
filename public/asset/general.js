@@ -11,13 +11,13 @@ class General{
         'X-Requested-With': 'XMLHttpRequest'
     }
     claseSpinner = "fas fa-spinner fa-spin";
-    funcfetch(url,dato){
+    funcfetch(url,dato,metodo = "POST"){
         return fetch(url,{
             headers: {
                 'X-CSRF-TOKEN' : this.token,
                 'X-Requested-With' : 'XMLHttpRequest'
             },
-            method: 'POST',
+            method: metodo,
             body: dato
         }).then(response => response.json())
     }

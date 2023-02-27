@@ -8,10 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Productos extends Model
 {
     protected $table = 'productos';
-    public $timestamps = false;
+    const CREATED_AT = 'fechaCreada';
+    const UPDATED_AT = 'fechaActualizada';
 
-    public static function totalProductos()
+    public function marca()
     {
-        return Productos::count();
+        return $this->belongsTo(Marca::class,'marcaFk');
+    }
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class,'categoriaFk');
     }
 }

@@ -20,8 +20,8 @@ class CreateProductosTable extends Migration
             $table->string("descripcion")->nullable();
             $table->decimal('cantidad');
             $table->decimal('precioVenta');
-            $table->decimal('precioVentaPorMayor');
-            $table->decimal('precioCompra');
+            $table->decimal('precioVentaPorMayor')->nullable();
+            $table->decimal('precioCompra')->nullable();
             $table->unsignedBigInteger('categoriaFk');
             $table->unsignedBigInteger('marcaFk');
             $table->unsignedBigInteger('presentacionFk');
@@ -29,6 +29,7 @@ class CreateProductosTable extends Migration
             $table->foreign("marcaFk")->references("id")->on("marca");
             $table->foreign("presentacionFk")->references("id")->on("presentacion");
             $table->string("urlImagen");
+            $table->integer("igv")->default(1);
             $table->integer("estado")->default(1);
             $table->dateTimeTz("fechaCreada");
             $table->dateTimeTz("fechaActualizada");

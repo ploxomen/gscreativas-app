@@ -17,6 +17,7 @@ class CreatePresentacionTable extends Migration
             $table->id();
             $table->string("nombrePresentacion");
             $table->string("siglas",15);
+            $table->integer("estado");
             $table->dateTimeTz("fechaCreada");
             $table->dateTimeTz("fechaActualizada");
         });

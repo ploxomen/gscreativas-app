@@ -16,6 +16,7 @@ class CreateCategoriaTable extends Migration
         Schema::create('categoria', function (Blueprint $table) {
             $table->id();
             $table->string("nombreCategoria");
+            $table->integer("estado");
             $table->dateTimeTz("fechaCreada");
             $table->dateTimeTz("fechaActualizada");
         });
