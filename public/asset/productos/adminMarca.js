@@ -24,12 +24,12 @@ function loadPage(){
                 return data ? `<span class="badge badge-success">Vigenta</span>` : `<span class="badge badge-danger">Descontinuado</span>`
             }
         },
-        {
-            data: 'fechaCreada'
-        },
-        {
-            data: 'fechaActualizada'
-        },
+        // {
+        //     data: 'fechaCreada'
+        // },
+        // {
+        //     data: 'fechaActualizada'
+        // },
         {
             data: 'id',
             render : function(data){

@@ -15,10 +15,11 @@ class CreateProductosTable extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->id();
-            $table->string("codigoBarra")->unique();
+            $table->string("codigoBarra")->unique()->nullable();
             $table->string("nombreProducto");
             $table->string("descripcion")->nullable();
-            $table->decimal('cantidad');
+            $table->integer('cantidad');
+            $table->integer('cantidadMin')->nullable();
             $table->decimal('precioVenta');
             $table->decimal('precioVentaPorMayor')->nullable();
             $table->decimal('precioCompra')->nullable();
@@ -28,7 +29,7 @@ class CreateProductosTable extends Migration
             $table->foreign("categoriaFk")->references("id")->on("categoria");
             $table->foreign("marcaFk")->references("id")->on("marca");
             $table->foreign("presentacionFk")->references("id")->on("presentacion");
-            $table->string("urlImagen");
+            $table->string("urlImagen")->nullable();
             $table->integer("igv")->default(1);
             $table->integer("estado")->default(1);
             $table->dateTimeTz("fechaCreada");

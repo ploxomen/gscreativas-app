@@ -8,6 +8,8 @@ use App\Http\Controllers\Usuario;
 use App\Http\Controllers\Usuario\Area;
 use App\Http\Controllers\Usuario\Rol;
 use App\Http\Controllers\ventas;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,10 +53,10 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
         Route::prefix('producto')->group(function () {
             Route::get('/', [MisProductos::class, 'index'])->name('admin.producto.index');
             Route::post('listar', [MisProductos::class, 'listar']);
-            Route::get('listar/{presentacion}', [MisProductos::class, 'show']);
+            Route::get('listar/{producto}', [MisProductos::class, 'show']);
             Route::post('crear', [MisProductos::class, 'store']);
-            Route::post('editar/{presentacion}', [MisProductos::class, 'update']);
-            Route::delete('eliminar/{presentacion}', [MisProductos::class, 'destroy']);
+            Route::post('editar/{producto}', [MisProductos::class, 'update']);
+            Route::delete('eliminar/{producto}', [MisProductos::class, 'destroy']);
         });
        
     });
@@ -72,6 +74,17 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
         Route::post('area/accion', [Area::class, 'accionesArea']);
 
     });
+    Route::get('storage/{filename}', function ($filename){
+        $path = storage_path('app/productos/' . $filename);
+        if (!File::exists($path)) {
+            abort(404);
+        }
+        $file = File::get($path);
+        $type = File::mimeType($path);
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+        return $response;
+    })->name("urlImagen"); 
 });
 Route::middleware(['guest'])->prefix('intranet')->group(function () {
     Route::get('login', [Usuario::class, 'loginView'])->name('login');

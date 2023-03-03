@@ -47,8 +47,8 @@
                                 <th>N°</th>
                                 <th>Categoría</th>
                                 <th>Estado</th>
-                                <th>Fecha Creada</th>
-                                <th>Fecha Actualizada</th>
+                                {{-- <th>Fecha Creada</th>
+                                <th>Fecha Actualizada</th> --}}
                                 <th>Acciones</th>
                             </tr>
                         </thead>

@@ -18,12 +18,13 @@ function loadPage(){
         },
         {
             data: 'nombreArea'
-        },{
-            data: 'fechaCreada'
         },
-        {
-            data: 'fechaActualizada'
-        },
+        // {
+        //     data: 'fechaCreada'
+        // },
+        // {
+        //     data: 'fechaActualizada'
+        // },
         {
             data: 'id',
             render : function(data){

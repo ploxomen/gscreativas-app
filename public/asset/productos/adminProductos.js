@@ -1,72 +1,204 @@
-window.onload = loadPage;
 function loadPage(){
     let gen = new General();
-    let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    $('.select2').select2({
-        theme: 'bootstrap',
-        width: '100%',
-        placeholder: 'Selecciona las opciones',
-        tags: true
-    })
-
-    let inpImg = document.getElementById('upload-img');
-    let iptImgForm = document.getElementById('imagenes');
-    let ulViewImg = document.getElementById('prev-img');
-    let listImg = new DataTransfer();
-    inpImg.addEventListener('change',function(e){
-        e.preventDefault();
-        let files = e.target.files;
-        for (let i = 0; i < files.length; i++) {
-            let imagen = new Image();
-            let li = document.createElement('li'),
-                name = document.createElement('span'),
-                btnClose = document.createElement('button');
-            li.classList.add('item-img');
-            name.textContent = files[i].name;
-            btnClose.classList.add('boton-close');
-            btnClose.title = 'Eliminar imagen';
-            btnClose.dataset.itemId = files[i].lastModified;
-            btnClose.innerHTML = `<span class='material-icons' style='color:white;'>close</span>`
-            imagen.src = URL.createObjectURL(files[i]);
-            li.append(imagen,name,btnClose);
-            ulViewImg.append(li);
-            listImg.items.add(files[i]);
-        }
-    });
-    ulViewImg.addEventListener('click',function(event){
-        if(event.target.classList.contains('boton-close')){
-            const id = event.target.dataset.itemId;
-            let index = null;
-            for (let i = 0; i < listImg.files.length; i++) {
-                if(listImg.files[i].lastModified == id){
-                    index = i;
-                    break;
+    for (const cambioCantidad of document.querySelectorAll('.cambiar-cantidad')) {
+        cambioCantidad.addEventListener("click",gen.aumentarDisminuir);
+    }
+    for (const swhitchOn of document.querySelectorAll(".change-switch")) {
+        swhitchOn.addEventListener("change",gen.switchs);
+    }
+    const tablaProducto = document.querySelector("#tablaProductos");
+    const tablaProductoDatatable = $(tablaProducto).DataTable({
+        ajax: {
+            url: 'producto/listar',
+            method: 'POST',
+            headers: gen.requestJson,
+            data: function (d) {
+                // d.acciones = 'obtener';
+                // d.area = $("#cbArea").val();
+                // d.rol = $("#cbRol").val();
+            }
+        },
+        columns: [{
+            data: 'id',
+            render: function(data,type,row, meta){
+                return meta.row + 1;
+            }
+        },
+        {
+            data: 'codigoBarra'
+        },
+        {
+            data: 'nombreProducto'
+        },
+        {
+            data: 'marca.nombreMarca',
+            name : 'marca.nombreMarca'
+        },
+        {
+            data : 'categoria.nombreCategoria',
+            name : 'categoria.nombreCategoria'
+        },
+        {
+            data: 'cantidad'
+        },
+        {
+            data: 'cantidadMin',
+            render : function(data){
+                return isNaN(parseInt(data)) ? 0 : parseInt(data);
+            }
+        },
+        {
+            data : 'presentacion.nombrePresentacion',
+            name : 'presentacion.nombrePresentacion'
+        },
+        {
+            data: 'precioVenta',
+            render : function(data){
+                return gen.resetearMoneda(data)
+            }
+        },
+        {
+            data: 'precioCompra',
+            render : function(data){
+                return gen.resetearMoneda(data)
+            }
+        },
+        {
+            data : 'estado',
+            render : function(data){
+                if(data === 1){
+                    return '<span class="badge badge-success">Activo</span>';
+                }else if(data === 0){
+                    return '<span class="badge badge-danger">Descontinuado</span>';
+                }else{
+                    return '<span class="text-danget">No establecido</span>';
                 }
             }
-            if(index != null){
-                listImg.items.remove(index);
-                event.target.parentElement.remove();
-                alertify.success('Imagen eliminada');
+        },
+        {
+            data: 'id',
+            render : function(data){
+                return `<div class="d-flex justify-content-center" style="gap:5px;"><button class="btn btn-sm btn-outline-info p-1" data-producto="${data}">
+                    <small>
+                    <i class="fas fa-pencil-alt"></i>
+                    Editar
+                    </small>
+                </button>
+                <button class="btn btn-sm btn-outline-danger p-1" data-producto="${data}">
+                    <small>    
+                    <i class="fas fa-trash-alt"></i>
+                        Eliminar
+                    </small>
+                </button></div>`
             }
+        },
+        ]
+    });
+    let idProducto = null;
+    const prevImagen = document.querySelector("#imgPrevio");
+    document.querySelector("#customFileLang").onchange = function(e){
+        let reader = new FileReader();
+        reader.onload = function(){
+            prevImagen.src = reader.result;
         }
-    })
-    document.getElementById('send-form').addEventListener('submit',function(e){
+        reader.readAsDataURL(e.target.files[0]);
+    }
+    const formProducto = document.querySelector("#formProducto");
+    formProducto.addEventListener("submit",async function(e){
         e.preventDefault();
-        iptImgForm.files = listImg.files;
         let datos = new FormData(this);
-        let xhr = new XMLHttpRequest();
-        
-        xhr.open('POST','productos/add');
-        xhr.setRequestHeader('X-CSRF-TOKEN',token);
-        xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
-        // xhr.setRequestHeader("Content-Type","multipart/form-data");
-        xhr.onreadystatechange = ()=>{
-            if(xhr.readyState == 4 && xhr.status == 200){
-                console.log('si');
+        try {
+            const response = await gen.funcfetch(idProducto ? "producto/editar/" + idProducto : "producto/crear",datos);
+            if(response.session){
+                return alertify.alert([...alertaSesion],() => {window.location.reload()});
+            }
+            if(response.error){
+                return alertify.alert("Error",response.error);
+            }
+            alertify.success(response.success);
+            tablaProductoDatatable.draw();
+            $('#agregarProducto').modal("hide");
+        } catch (error) {
+            console.error(error);
+            alertify.error("error al agregar un producto");
+        }
+    });
+    $('#agregarProducto').on("hidden.bs.modal",function(e){
+        idProducto = null;
+        switchEstado.disabled = true;
+        switchEstado.checked = true;
+        switchEstado.parentElement.querySelector("label").textContent = "VIGENTE";
+        switchIgv.checked = true;
+        switchIgv.parentElement.querySelector("label").textContent = "CON IGV";
+        document.querySelector("#customFileLang").value = "";
+        prevImagen.src = window.origin + "/asset/img/imgprevproduc.png";
+    });
+    const btnModalSave = document.querySelector("#btnGuardarFrm");
+    const switchEstado = document.querySelector("#idModalestado");
+    const switchIgv = document.querySelector("#idModaligv");
+    btnModalSave.onclick = e => document.querySelector("#btnFrmEnviar").click();
+    tablaProducto.addEventListener("click",async function(e){
+        if (e.target.classList.contains("btn-outline-info")){
+            btnModalSave.querySelector("span").textContent = "Editar";
+            try {
+                gen.cargandoPeticion(e.target, gen.claseSpinner, true);
+                const response = await gen.funcfetch("producto/listar/" + e.target.dataset.producto,null,"GET");
+                gen.cargandoPeticion(e.target, 'fas fa-pencil-alt', false);
+                if (response.session) {
+                    return alertify.alert([...gen.alertaSesion], () => { window.location.reload() });
+                }
+                idProducto = e.target.dataset.producto;
+                for (const key in response.producto) {
+                    if (Object.hasOwnProperty.call(response.producto, key)) {
+                        const valor = response.producto[key];
+                        const dom = document.querySelector("#idModal" + key);
+                        if (key == "estado"){
+                            switchEstado.checked = valor === 1 ? true : false;
+                            continue;
+                        }
+                        if (key == "igv"){
+                            switchIgv.checked = valor === 1 ? true : false;
+                            continue;
+                        }
+                        if((!dom || !valor) && key != 'urlProductos'){
+                            continue;
+                        }
+                        if(key == "urlProductos"){
+                            prevImagen.src = valor;
+                            continue;
+                        }
+                        dom.value = valor;
+                    }
+                }
+                $('#agregarProducto .select2-simple').trigger("change");
+                switchEstado.disabled = false;
+                $('#agregarProducto').modal("show");
+            } catch (error) {
+                gen.cargandoPeticion(e.target, 'fas fa-pencil-alt', false);
+                console.error(error);
+                alertify.error("error al obtener el producto");
             }
         }
-        xhr.send(datos);
+        if (e.target.classList.contains("btn-outline-danger")) {
+            alertify.confirm("Alerta","¿Estás seguro de eliminar este producto?",async ()=>{
+                try {
+                    gen.cargandoPeticion(e.target, gen.claseSpinner, true);
+                    const response = await gen.funcfetch("producto/eliminar/" + e.target.dataset.producto, null,"DELETE");
+                    gen.cargandoPeticion(e.target, 'fas fa-trash-alt', false);
+                    if (response.session) {
+                        return alertify.alert([...gen.alertaSesion], () => { window.location.reload() });
+                    }
+                    tablaProductoDatatable.draw();
+                    return alertify.success(response.success);
+                } catch (error) {
+                    gen.cargandoPeticion(e.target, 'fas fa-trash-alt', false);
+                    console.error(error);
+                    alertify.error("error al eliminar el usuario");
+                }
+            },()=>{});
+            
+        }
     })
-    let btnLoadImg = document.getElementById('btn-load-img');
-    btnLoadImg.onclick = ()=>{inpImg.click();}
 }
+window.addEventListener("DOMContentLoaded",loadPage);
+

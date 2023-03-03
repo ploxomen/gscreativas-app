@@ -23,13 +23,16 @@
     <script src="{{asset('library/alertify/alertify.min.js')}}"></script>
     <link rel="stylesheet" href="st{{asset('library/pagination/pagination.css')}}">
     <script src="{{asset('library/pagination/pagination.js')}}"></script>
+    <script src="{{asset('asset/home.js')}}"></script>
     @yield('head')
     <title>@yield('title')</title>
 </head>
 <body>
+    <div class="menu-activos" id="salirMenuNavegacion"></div>
     <div class="contenedor">
-        <div class="navegacion">
-            <div class="mi-logo"></div>
+        <div class="navegacion" id="menuNavegacion">
+            <div class="mi-logo text-right">
+            </div>
             <div class="mi-perfil d-flex p-3" style="gap: 10px;">
                 @php
                     $urlPerfil = auth()->user()->sexo == "F" ? "mujer" : "hombre";
@@ -54,21 +57,21 @@
                 @endphp
                 @foreach ($modulos as $k => $modulo)
                     @if($grupo != $modulo->grupos->id)
-                        <li class="hover-menu display-submenu" role="button" data-toggle="collapse" data-target="#collapse{{$modulo->grupos->id}}" aria-expanded="{{Request::route()->getName() == $modulo->url ? 'true' : 'false'}}" aria-controls="collapse{{$modulo->grupos->id}}">
+                        <li class="hover-menu display-submenu" role="button" data-toggle="collapse" data-target="#menuCollapse{{$modulo->grupos->id}}" aria-expanded="{{Request::route()->getName() == $modulo->url ? 'true' : 'false'}}" aria-controls="collapse{{$modulo->grupos->id}}">
                             <a href="javascript:void(0)" class="active-panel">
-                                <span class="icono material-icons">groups</span>
+                                <span class="icono material-icons">{{$modulo->grupos->icono}}</span>
                                 <span class="title">{{$modulo->grupos->grupo}}</span>
                                 <span class="material-icons">expand_more</span>
                             </a>
                         </li>
-                        <ul class="sub-menu collapse" id="collapse{{$modulo->grupos->id}}" data-parent="#menuIntranet">
+                        <ul class="sub-menu collapse" id="menuCollapse{{$modulo->grupos->id}}" data-parent="#menuIntranet">
                         @php
                             $grupo = $modulo->grupos->id;
                         @endphp
                     @endif
                     <li class="hover-menu {{Request::route()->getName() == $modulo->url ? 'activeli' : ''}}">
                         <a href="{{route($modulo->url)}}">
-                            <span class="icono material-icons">add</span>
+                            <span class="icono material-icons">{{$modulo->icono}}</span>
                             <span class="title">{{$modulo->titulo}}</span>
                         </a>
                     </li>
@@ -91,17 +94,20 @@
             </div>
             <div class="info-person">
                 <div class="btn-menu">
-                    <button class="btn-info-menu">
+                    <button class="btn-info-menu" type="button" id="menuDesplegable">
                         <span class="material-icons">menu</span>
                     </button>
+                    
+                </div>
+                <div class="box-my">
                     <button class="btn-info-menu">
                         <span class="material-icons">search</span>
                     </button>
-                    <button class="btn-info-menu">
-                        <span class="material-icons">notifications</span>
-                    </button>
-                </div>
-                <div class="box-my">
+                    <div>
+                        <button class="btn-info-menu">
+                            <span class="material-icons">notifications</span>
+                        </button>
+                    </div>
                     <div class="info-perfil">
                         <span class="d-block">{{auth()->user()->nombres}}</span>
                         <span class="py-2" style="color: rgb(145, 145, 145);">{{auth()->user()->area->nombreArea}}</span>
@@ -122,6 +128,7 @@
                           </div>
                     </div>
                     
+                    
                 </div>
                
             </div>
@@ -131,22 +138,4 @@
         </div>
     </div>
 </body>
-<script>
-    const liActive = document.querySelector(".activeli");
-    if(liActive && !liActive.parentElement.classList.contains("show")){
-        liActive.parentElement.classList.add("show");
-        document.querySelector(`[data-target="#${liActive.parentElement.id}"]`).classList.toggle("activesub");
-        liActive.parentElement.setAttribute("arial-expanded","true");
-    }
-    for (const display of document.querySelectorAll('.display-submenu')) {
-        display.onclick = function(e){
-            for (const display2 of document.querySelectorAll('.display-submenu')) {
-                if(display != display2){
-                    display2.classList.remove("activesub");
-                }
-            }
-            display.classList.toggle("activesub");
-        }
-    }
-</script>
 </html>

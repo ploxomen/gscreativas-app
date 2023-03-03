@@ -52,8 +52,8 @@
                                 <th>Presentación</th>
                                 <th>Siglas</th>
                                 <th>Estado</th>
-                                <th>Fecha Creada</th>
-                                <th>Fecha Actualizada</th>
+                                {{-- <th>Fecha Creada</th>
+                                <th>Fecha Actualizada</th> --}}
                                 <th>Acciones</th>
                             </tr>
                         </thead>

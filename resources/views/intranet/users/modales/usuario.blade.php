@@ -60,7 +60,7 @@
                 </div>
                 <div class="form-group col-12 col-md-6">
                     <label for="idSexo">Sexo</label> 
-                    <select name="sexo" id="idValorModalsexo" class="form-control">
+                    <select name="sexo" id="idValorModalsexo" class="form-control select2-simple">
                         <option value="">Ninguno</option>
                         <option value="M">Masculino</option>
                         <option value="F">Femenino</option>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="form-group col-12 col-md-6 col-lg-4 form-required">
                     <label for="idValorModalareaFk">Área</label>
-                    <select name="areaFk" class="form-control select2" id="idValorModalareaFk" required>
+                    <select name="areaFk" class="form-control select2-simple" id="idValorModalareaFk" required>
                         <option></option>
                         @foreach ($areas as $area)
                             <option value="{{$area->id}}">{{$area->nombreArea}}</option>
@@ -83,7 +83,7 @@
                 </div>
                 <div class="form-group col-12 col-md-6 col-lg-8 form-required">
                     <label for="idValorModalroles">Roles</label>
-                    <select name="roles[]" class="form-control select2" multiple id="idValorModalroles" required>
+                    <select name="roles[]" class="form-control select2-simple" multiple id="idValorModalroles" required>
                         @foreach ($roles as $rol)
                             <option value="{{$rol->id}}">{{$rol->nombreRol}}</option>
                         @endforeach

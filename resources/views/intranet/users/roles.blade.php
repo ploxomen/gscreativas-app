@@ -52,8 +52,8 @@
                                 <th>N°</th>
                                 <th>Rol</th>
                                 <th>Icono</th>
-                                <th>Fecha Creada</th>
-                                <th>Fecha Actualizada</th>
+                                {{-- <th>Fecha Creada</th>
+                                <th>Fecha Actualizada</th> --}}
                                 <th>Acciones</th>
                             </tr>
                         </thead>
