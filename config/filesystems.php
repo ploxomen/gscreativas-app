@@ -46,6 +46,11 @@ return [
             'root' => storage_path('app/productos'),
             'url' => env('APP_URL').'/storage/productos',
         ],
+        'avatars' => [
+            'driver' => 'local',
+            'root' => storage_path('app/avatars'),
+            'url' => env('APP_URL').'/storage/avatars',
+        ],
 
         's3' => [
             'driver' => 's3',

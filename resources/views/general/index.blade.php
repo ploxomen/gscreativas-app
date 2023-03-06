@@ -35,10 +35,16 @@
             </div>
             <div class="mi-perfil d-flex p-3" style="gap: 10px;">
                 @php
-                    $urlPerfil = auth()->user()->sexo == "F" ? "mujer" : "hombre";
+                    $usuario = auth()->user();
+                    $urlPerfil = $usuario->sexo == "F" ? "mujer" : "hombre";
+                    if(!empty($usuario->urlAvatar)){
+                        $urlPerfil = route("urlImagen",["avatars",$usuario->urlAvatar]);
+                    }else{
+                        $urlPerfil = asset('asset/img/modulo/perfil_' . $urlPerfil .'.png');
+                    }
                 @endphp
                 <div>
-                    <img src="{{asset('asset/img/modulo/perfil_' . $urlPerfil .'.png')}}" width="70px">
+                    <img src="{{$urlPerfil}}" class="avatar-menu-img" width="70px" height="70px">
                 </div>
                 <div class="info-perfil">
                     <span class="d-block pt-3">{{auth()->user()->nombres}}</span>
@@ -115,7 +121,7 @@
                     <div>
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-outline-light dropdown-toggle toggle-split" data-toggle="dropdown" aria-expanded="false">
-                                <img src="{{asset('asset/img/modulo/perfil_' . $urlPerfil .'.png')}}" width="30px">
+                                <img src="{{$urlPerfil}}" class="avatar-menu-img" width="30px" height="30px">
                             </button>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <h6 class="dropdown-header" id="lista_roles_index">Roles</h6>
@@ -123,6 +129,7 @@
                                     <a class="dropdown-item {{$role->pivot->activo == 1 ? "active" : ""}}" href="{{route('cambiarRol',['rol' => $role->id])}}">{{$role->nombreRol}}</a>
                                 @endforeach
                                 <div class="dropdown-divider"></div>
+                                <a href="{{route('miPerfil')}}" class="dropdown-item"><span>Mi perfil</span></a>
                                 <a href="{{route('cerrarSesion')}}" class="dropdown-item"><span>Cerrar sesión</span></a>
                             </div>
                           </div>

@@ -28,7 +28,6 @@ class MisProductos extends Controller
     }
     public function index()
     {
-        // dd(url('storage/app/'.'productos/externa_1677781486.jpg'));
         $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloArea);
         if(isset($verif['session'])){
             return redirect()->route("home"); 
@@ -81,7 +80,7 @@ class MisProductos extends Controller
         if(isset($verif['session'])){
             return response()->json(['session' => true]); 
         }
-        $producto->urlProductos = route("urlImagen",[$producto->urlImagen]);
+        $producto->urlProductos = route("urlImagen",["productos",$producto->urlImagen]);
         return response()->json(['producto' => $producto->makeHidden("fechaCreada","fechaActualizada")]);
     }
     public function update(Productos $producto, Request $request)

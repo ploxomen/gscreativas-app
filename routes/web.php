@@ -66,6 +66,8 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
     Route::prefix('usuarios')->group(function(){
         Route::post('accion',[Usuario::class,'getArea']);
         Route::get('cambio/rol/{rol}', [Usuario::class, 'cambioRol'])->name('cambiarRol');
+        Route::get('miperfil', [Usuario::class, 'miPerfil'])->name('miPerfil');
+        Route::post('miperfil/actualizar', [Usuario::class, 'actualizarPerfil']);
         Route::get('/',[Usuario::class,'listarUsuarios'])->name('admin.usuario.index');
         Route::get('cerrar/sesion', [Usuario::class, 'logoauth'])->name('cerrarSesion');
         Route::get('rol',[Rol::class,'viewRol'])->name('admin.rol.index');
@@ -74,8 +76,8 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
         Route::post('area/accion', [Area::class, 'accionesArea']);
 
     });
-    Route::get('storage/{filename}', function ($filename){
-        $path = storage_path('app/productos/' . $filename);
+    Route::get('storage/{tipo}/{filename}', function ($tipo,$filename){
+        $path = storage_path('app/'.$tipo . '/' . $filename);
         if (!File::exists($path)) {
             abort(404);
         }

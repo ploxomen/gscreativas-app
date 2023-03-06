@@ -103,8 +103,10 @@ table thead tr th{
 .navegacion ul .hover-menu:hover {
     background: var(--hover-menu);
 }
-.navegacion ul .hover-menu:hover a {
-    /* color: var(--color-principal); */
+label:has(> .material-icons){
+    display: flex;
+    align-items: center;
+    gap: 3px;
 }
 .panel{
     width: calc(100% - var(--width-panel));
@@ -147,6 +149,10 @@ button i{
 }
 .menu-activos{
     display: none;
+}
+.avatar-menu-img{
+    object-fit: contain;
+    border-radius: 100%;
 }
 @media screen and (max-width: 950px) {
     #menuDesplegable{
@@ -198,7 +204,7 @@ button small i{
     user-select: none;
     pointer-events: none;
 }
-.form-required > label::after {
+.form-group:has(input:required)>label::after {
     content: "*";
     color: red;
 }

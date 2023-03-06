@@ -29,15 +29,15 @@
                     <label for="idValorModalnroDocumento">N° de documento</label>
                     <input type="tel" name="nroDocumento" id="idValorModalnroDocumento" class="form-control">
                 </div>
-                <div class="form-group col-12 col-md-6 form-required">
+                <div class="form-group col-12 col-md-6">
                     <label for="idValorModalnombres">Nombres</label>
                     <input type="text" required name="nombres" id="idValorModalnombres" class="form-control">
                 </div>
-                <div class="form-group col-12 col-md-6 form-required">
+                <div class="form-group col-12 col-md-6">
                     <label for="idValorModalapellidos">Apellidos</label>
                     <input type="text" required name="apellidos" id="idValorModalapellidos" class="form-control">
                 </div>
-                <div class="form-group col-12 form-required">
+                <div class="form-group col-12">
                     <label for="idValorModalcorreo">Correo</label> 
                     <input type="email" required class="form-control" name="correo" id="idValorModalcorreo">
                     <small class="form-text text-muted">Con este correo se inicia sesión en el sistema</small>

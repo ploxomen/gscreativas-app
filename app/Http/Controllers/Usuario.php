@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Producto\MisProductos;
 use App\Models\Area;
 use App\Models\Rol;
 use App\Models\User;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -25,6 +27,36 @@ class Usuario extends Controller
     {
         $areas = Area::get();
         return view('intranet.users.index',['areas' => $areas]);
+    }
+    public function miPerfil() : View
+    {
+        $modulos = $this->obtenerModulos();
+        return view("intranet.users.miPerfil",compact("modulos"));
+    }
+    public function actualizarPerfil(Request $request, MisProductos $productController)
+    {
+        if(!$request->ajax()){
+            return response()->json(['error' => 'error en la petición']);
+        }
+        $datos = $request->only("tipoDocumento","nroDocumento","direccion","telefono","celular","fechaCumple","sexo");
+        DB::beginTransaction();
+        try {
+            if($request->has("avatar")){
+                $urlAvatar = Auth::user()->urlAvatar;
+                if(!empty($urlAvatar) && Storage::disk('avatars')->exists($urlAvatar)){
+                    Storage::disk('avatars')->delete($urlAvatar);
+                }
+                $datos['urlAvatar'] = $productController->guardarArhivo($request,'avatar',"avatars");
+            }
+            User::find(Auth::id())->update($datos);
+            DB::commit();
+            return response()->json(['success' => 'datos actualizados correctamente']);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return response()->json(['error' => $th->getMessage()]);
+        }
+        
+        
     }
     public function getArea(Request $request)
     {

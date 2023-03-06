@@ -28,6 +28,7 @@ class User extends Authenticatable
         'telefono',
         'celular',
         'direccion',
+        'urlAvatar',
         'fechaCumple',
         'sexo',
         'estado',
