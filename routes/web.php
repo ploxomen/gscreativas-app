@@ -88,6 +88,9 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
         return $response;
     })->name("urlImagen"); 
 });
+Route::get("/",function(){
+    return redirect()->route('login');
+});
 Route::middleware(['guest'])->prefix('intranet')->group(function () {
     Route::get('login', [Usuario::class, 'loginView'])->name('login');
     Route::get("usuario/restaurar", [Usuario::class, 'retaurarContra'])->name('restaurarContra');

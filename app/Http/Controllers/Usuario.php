@@ -196,7 +196,7 @@ class Usuario extends Controller
         }else{
             $rol = $roles->roles()->where('activo',1)->first();
         }
-        return Rol::find($rol->id)->modulos()->get();
+        return Rol::find($rol->id)->modulos()->orderBy('grupoFk')->get();
     }
     public function validarXmlHttpRequest($urlModulo)
     {

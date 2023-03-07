@@ -116,7 +116,7 @@ function loadPage(){
         try {
             general.cargandoPeticion(btnGuardarForm, general.claseSpinner, true);
             const response = await general.funcfetch(url, datos, "POST");
-            general.cargandoPeticion(e.target, 'fas fa-save', false);
+            general.cargandoPeticion(btnGuardarForm, 'fas fa-save', false);
             if (response.session) {
                 return alertify.alert([...alertaSesion], () => { window.location.reload() });
             }

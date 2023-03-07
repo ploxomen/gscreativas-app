@@ -23,7 +23,11 @@ class General{
     }
     cargandoPeticion($boton,claseIcono,deshabilitar){
         const btn = $boton.querySelector("i");
-        $boton.disabled = deshabilitar;
+        if(deshabilitar){
+            $boton.setAttribute("disabled","disabled");
+        }else{
+            $boton.removeAttribute("disabled");
+        }
         btn.className = claseIcono;
     }
     aumentarDisminuir(e){

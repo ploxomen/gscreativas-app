@@ -39,7 +39,6 @@ function loadPage(){
         ]
     });
     const txtRol = document.querySelector("#txtRol");
-    const txtIcono = document.querySelector("#txtIcono");
     const formRol = document.querySelector("#formRol");
     const btnGuardarForm = document.querySelector("#btnGuardarForm");
     let idRol = null;
@@ -59,7 +58,6 @@ function loadPage(){
                     alertify.success("pendiente para editar");
                     const rol = response.success;
                     txtRol.value = rol.nombreRol;
-                    txtIcono.value = rol.claseIcono;
                     idRol = rol.id;
                     btnGuardarForm.querySelector("span").textContent = "Editar";
                 }
@@ -113,7 +111,7 @@ function loadPage(){
         try {
             general.cargandoPeticion(btnGuardarForm, general.claseSpinner, true);
             const response = await general.funcfetch("rol/accion", datos);
-            general.cargandoPeticion(e.target, 'fas fa-save', false);
+            general.cargandoPeticion(btnGuardarForm, 'fas fa-save', false);
             if (response.session) {
                 return alertify.alert([...general.alertaSesion], () => { window.location.reload() });
             }
