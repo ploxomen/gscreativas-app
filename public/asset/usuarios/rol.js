@@ -19,13 +19,6 @@ function loadPage(){
         {
             data: 'nombreRol'
         },
-        { data: 'claseIcono'},
-        // {
-        //     data: 'fechaCreada'
-        // },
-        // {
-        //     data: 'fechaActualizada'
-        // },
         {
             data: 'id',
             render : function(data){

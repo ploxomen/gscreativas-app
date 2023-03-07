@@ -22,7 +22,7 @@
                         <label for="txtRol">Rol</label>
                         <input type="text" name="rol" maxlength="255" class="form-control" placeholder="Ej: Administrador" id="txtRol" required>
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="txtIcono">Icono</label>
                         <input type="text" name="icono" maxlength="255" class="form-control" placeholder="Ej: fas fa-eraset" id="txtIcono">
                     </div>
@@ -31,7 +31,7 @@
                             Para conseguir los íconos ingrese al siguiente enlace de
                             <a href="https://fontawesome.com/v5/search?o=r&m=free">FontAwesome</a>
                         </small>
-                    </div>
+                    </div> --}}
                     <div class="form-group text-center">
                         <button type="submit" class="btn btn-outline-primary" id="btnGuardarForm">
                             <i class="fas fa-save"></i>
@@ -51,7 +51,7 @@
                             <tr>
                                 <th>N°</th>
                                 <th>Rol</th>
-                                <th>Icono</th>
+                                {{-- <th>Icono</th> --}}
                                 {{-- <th>Fecha Creada</th>
                                 <th>Fecha Actualizada</th> --}}
                                 <th>Acciones</th>

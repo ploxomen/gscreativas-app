@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Rol extends Model
 {
     public $table = "rol";
-    protected $fillable = ['nombreRol','claseIcono'];
+    protected $fillable = ['nombreRol'];
     const CREATED_AT = 'fechaCreada';
     const UPDATED_AT = 'fechaActualizada';
 

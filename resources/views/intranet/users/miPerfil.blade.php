@@ -51,7 +51,7 @@
                     </label>
                     <input type="text" name="nroDocumento" class="form-control" id="idNumeroDoc" maxlength="20" value="{{auth()->user()->nroDocumento}}">
                 </div>
-                <div class="form-group col-6">
+                <div class="form-group col-6 col-lg-4">
                     <label for="idNombres">
                         <span class="material-icons">
                             person
@@ -60,7 +60,7 @@
                     </label>
                     <input type="text" readonly class="form-control" id="idNombres" required value="{{auth()->user()->nombres}}">
                 </div>
-                <div class="form-group col-6">
+                <div class="form-group col-6 col-lg-4">
                     <label for="idApellidos">
                         <span class="material-icons">
                             person
@@ -69,7 +69,7 @@
                     </label>
                     <input type="text" readonly class="form-control" id="idApellidos" required value="{{auth()->user()->apellidos}}">
                 </div>
-                <div class="form-group col-12 col-md-6">
+                <div class="form-group col-12 col-lg-4 col-md-6">
                     <label for="idCorreo">
                         <span class="material-icons">
                             alternate_email
@@ -78,7 +78,7 @@
                     </label>
                     <input type="email" readonly class="form-control" id="idCorreo" required value="{{auth()->user()->correo}}">
                 </div>
-                <div class="form-group col-12 col-md-6">
+                <div class="form-group col-12">
                     <label for="idDireccion">
                         <span class="material-icons">
                             home
@@ -128,7 +128,7 @@
                     </select>
                 </div>
                 <div class="form-group col-12 text-center">
-                    <button class="btn btn-outline-primary">
+                    <button class="btn btn-outline-primary" id="btnActualizar">
                         <i class="far fa-save"></i>
                         <span>
                             Actualizar
