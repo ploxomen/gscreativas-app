@@ -98,8 +98,10 @@ function loadPage(){
             alertify.error("error al guardar el usuario");
         }
     });
+    const modalTitulo = document.querySelector("#tituloUsuario");
     $('#usurioModal').on('hidden.bs.modal', function (event) {
         frmUsuario.reset();
+        modalTitulo.textContent = "Crear Usuario";
         $('#usurioModal .select2').val("").trigger("change");
         boxContrasena.querySelector("input").disabled = false;
         boxContrasena.hidden = false;
@@ -120,6 +122,7 @@ function loadPage(){
                 if (response.session) {
                     return alertify.alert([...gen.alertaSesion], () => { window.location.reload() });
                 }
+                modalTitulo.textContent = "Editar Usuario";
                 idUsuario = e.target.dataset.usuario;
                 for (const key in response.success) {
                     if (Object.hasOwnProperty.call(response.success, key)) {
@@ -165,7 +168,6 @@ function loadPage(){
                     alertify.error("error al eliminar el usuario");
                 }
             },()=>{});
-            
         }
     }
     $('#cbArea, #cbRol').on("change",function(e){

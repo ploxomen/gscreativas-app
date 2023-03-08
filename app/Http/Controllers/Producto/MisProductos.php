@@ -4,14 +4,10 @@ namespace App\Http\Controllers\Producto;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Usuario;
-use App\Models\Area;
 use App\Models\Categoria;
 use App\Models\Marca;
 use App\Models\Presentacion;
 use App\Models\Productos;
-use App\Models\Rol;
-use App\Models\Unidades;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -74,13 +70,13 @@ class MisProductos extends Controller
             return response()->json(['error' => $th->getMessage()]);
         }
     }
-    public function show(Productos $producto, Request $request)
+    public function show(Productos $producto)
     {
         $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloArea);
         if(isset($verif['session'])){
             return response()->json(['session' => true]); 
         }
-        $producto->urlProductos = route("urlImagen",["productos",$producto->urlImagen]);
+        $producto->urlProductos = !empty($producto->urlImagen) ? route("urlImagen",["productos",$producto->urlImagen]) : null;
         return response()->json(['producto' => $producto->makeHidden("fechaCreada","fechaActualizada")]);
     }
     public function update(Productos $producto, Request $request)

@@ -21,6 +21,19 @@ class General{
             body: dato
         }).then(response => response.json())
     }
+    seleccionarCheckbox(claseSeleccionar,$selecionarTodo){
+        let cantidadClase = 0;
+        const claseSeleccionar2 = document.querySelectorAll(claseSeleccionar);
+        for (const selecion of claseSeleccionar2) {
+            if (selecion.parentElement.parentElement.parentElement.classList.contains("d-none")) {
+                continue;
+            }
+            cantidadClase++;
+        }
+        const claseSelecionada = document.querySelectorAll(claseSeleccionar+":checked");
+        $selecionarTodo.checked = cantidadClase > 0 && cantidadClase == claseSelecionada.length ? true : false;
+        return claseSelecionada.length;
+    }
     cargandoPeticion($boton,claseIcono,deshabilitar){
         const btn = $boton.querySelector("i");
         if(deshabilitar){

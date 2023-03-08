@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Usuario;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Usuario;
+use App\Models\Modulo;
 use App\Models\Rol as ModelsRol;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,9 @@ class Rol extends Controller
     public function viewRol(Request $request) : View
     {
         $modulos = $this->userControler->obtenerModulos();
-        return view("intranet.users.roles",compact("modulos"));
+        $modulosLista = Modulo::with("grupos")->orderBy("grupoFk")->get();
+        // dd($modulosLista);
+        return view("intranet.users.roles",compact("modulos", "modulosLista"));
     }
     public function accionesRoles(Request $request)
     {

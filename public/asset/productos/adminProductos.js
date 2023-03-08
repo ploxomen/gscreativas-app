@@ -103,11 +103,13 @@ function loadPage(){
         }
         reader.readAsDataURL(e.target.files[0]);
     }
+    const btnModalSave = document.querySelector("#btnGuardarFrm");
     const formProducto = document.querySelector("#formProducto");
     formProducto.addEventListener("submit",async function(e){
         e.preventDefault();
         let datos = new FormData(this);
         try {
+            gen.cargandoPeticion(btnModalSave, gen.claseSpinner, true);
             const response = await gen.funcfetch(idProducto ? "producto/editar/" + idProducto : "producto/crear",datos);
             if(response.session){
                 return alertify.alert([...alertaSesion],() => {window.location.reload()});
@@ -121,19 +123,24 @@ function loadPage(){
         } catch (error) {
             console.error(error);
             alertify.error("error al agregar un producto");
+        }finally{
+            gen.cargandoPeticion(btnModalSave, 'fas fa-save', false);
         }
     });
+    const modalTitulo = document.querySelector("#tituloProducto");
     $('#agregarProducto').on("hidden.bs.modal",function(e){
         idProducto = null;
+        modalTitulo.textContent = "Crear Producto";
         switchEstado.disabled = true;
         switchEstado.checked = true;
         switchEstado.parentElement.querySelector("label").textContent = "VIGENTE";
         switchIgv.checked = true;
         switchIgv.parentElement.querySelector("label").textContent = "CON IGV";
         document.querySelector("#customFileLang").value = "";
+        formProducto.reset();
+        $('#agregarProducto .select2-simple').trigger("change");
         prevImagen.src = window.origin + "/asset/img/imgprevproduc.png";
     });
-    const btnModalSave = document.querySelector("#btnGuardarFrm");
     const switchEstado = document.querySelector("#idModalestado");
     const switchIgv = document.querySelector("#idModaligv");
     btnModalSave.onclick = e => document.querySelector("#btnFrmEnviar").click();
@@ -147,6 +154,7 @@ function loadPage(){
                 if (response.session) {
                     return alertify.alert([...gen.alertaSesion], () => { window.location.reload() });
                 }
+                modalTitulo.textContent = "Editar Producto";
                 idProducto = e.target.dataset.producto;
                 for (const key in response.producto) {
                     if (Object.hasOwnProperty.call(response.producto, key)) {
@@ -164,7 +172,9 @@ function loadPage(){
                             continue;
                         }
                         if(key == "urlProductos"){
-                            prevImagen.src = valor;
+                            if (valor){
+                                prevImagen.src = valor;
+                            }
                             continue;
                         }
                         dom.value = valor;

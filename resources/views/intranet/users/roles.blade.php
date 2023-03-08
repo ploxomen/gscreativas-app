@@ -22,22 +22,12 @@
                         <label for="txtRol">Rol</label>
                         <input type="text" name="rol" maxlength="255" class="form-control" placeholder="Ej: Administrador" id="txtRol" required>
                     </div>
-                    {{-- <div class="form-group">
-                        <label for="txtIcono">Icono</label>
-                        <input type="text" name="icono" maxlength="255" class="form-control" placeholder="Ej: fas fa-eraset" id="txtIcono">
-                    </div>
-                    <div class="form-group">
-                        <small>
-                            Para conseguir los íconos ingrese al siguiente enlace de
-                            <a href="https://fontawesome.com/v5/search?o=r&m=free">FontAwesome</a>
-                        </small>
-                    </div> --}}
                     <div class="form-group text-center">
-                        <button type="submit" class="btn btn-outline-primary" id="btnGuardarForm">
-                            <i class="fas fa-save"></i>
-                            <span>Guardar</span>
+                        <button type="submit" class="btn btn-outline-primary form-group" id="btnGuardarForm">
+                            <i class="fas fa-hand-point-right"></i>
+                            <span>Siguiente</span>
                         </button>
-                        <button type="reset" class="btn btn-outline-danger">
+                        <button type="reset" class="btn btn-outline-danger form-group">
                             <i class="fas fa-eraser"></i>
                             <span>Cancelar</span>
                         </button>
@@ -62,5 +52,5 @@
             </div>
        </div>
     </section>
-    
+    @include('intranet.users.modales.modulos')
 @endsection

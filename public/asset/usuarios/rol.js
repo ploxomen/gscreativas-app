@@ -101,8 +101,46 @@ function loadPage(){
         btnGuardarForm.querySelector("span").textContent = "Guardar";
         idRol = null;
     }
+    const txtBuscador = document.querySelector("#buscarModulo");
+    txtBuscador.addEventListener("input", buscarModulos);
+    txtBuscador.addEventListener("search", buscarModulos);
+    const tablaModulosBuscar = document.querySelector("#modulosBuscar");
+    function buscarModulos(event) {
+        event.preventDefault();
+        for (const buscar of tablaModulosBuscar.children) {
+            const childrens = buscar.querySelectorAll(".grupo-buscar, .titulo-buscar, .descripcion-buscar");
+            let bus = -1;
+            for (const c of childrens) {
+                bus = c.textContent.toLocaleLowerCase().indexOf(event.target.value);
+                buscar.classList.toggle("d-none", bus < 0);
+                if (bus >= 0){
+                    break;
+                }
+            }
+        }
+        general.seleccionarCheckbox(txtCheckebox, selecionarTodo);
+    }
+    const txtInfoSeleccion = document.querySelector("#textoInfoSelecionado");
+    const selecionarTodo = document.querySelector("#selecionarTodoCheckbox");
+    const txtCheckebox = "#modulosBuscar .custom-control-input";
+    for (const selcionador of document.querySelectorAll(txtCheckebox)) {
+        selcionador.addEventListener("change", function (e) {
+            txtInfoSeleccion.textContent = general.seleccionarCheckbox(txtCheckebox, selecionarTodo);
+        });
+    }
+    selecionarTodo.addEventListener("change",function(e){
+        for (const selcionador of document.querySelectorAll(txtCheckebox)) {
+            if (selcionador.parentElement.parentElement.parentElement.classList.contains("d-none")){
+                continue;
+            }
+            selcionador.checked = e.target.checked;
+        }
+        txtInfoSeleccion.textContent = general.seleccionarCheckbox(txtCheckebox, selecionarTodo);
+    });
     formRol.onsubmit = async function(e){
         e.preventDefault();
+        $('#modalRol').modal("show");
+        return
         let datos = new FormData(this);
         datos.append("accion", idRol != null ? "editarRol" : 'nuevoRol');
         if(idRol != null){
