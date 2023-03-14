@@ -22,10 +22,17 @@ function loadPage(){
         {
             data: 'id',
             render : function(data){
-                return `<div class="d-flex justify-content-center" style="gap:5px;"><button class="btn btn-sm btn-outline-info p-1" data-rol="${data}">
+                return `<div class="d-flex justify-content-center" style="gap:5px;">
+                <button class="btn btn-sm btn-outline-info p-1" data-rol="${data}">
                     <small>
                     <i class="fas fa-pencil-alt"></i>
                     Editar
+                    </small>
+                </button>
+                <button class="btn btn-sm btn-outline-primary p-1" data-rol="${data}">
+                    <small>
+                    <i class="fas fa-pencil-alt"></i>
+                    Modulos
                     </small>
                 </button>
                 <button class="btn btn-sm btn-outline-danger p-1" data-rol="${data}">
@@ -40,7 +47,9 @@ function loadPage(){
     });
     const txtRol = document.querySelector("#txtRol");
     const formRol = document.querySelector("#formRol");
+    const txtInfoSeleccion = document.querySelector("#textoInfoSelecionado");
     const btnGuardarForm = document.querySelector("#btnGuardarForm");
+    const btnGuardarRol = document.querySelector("#btnGuardarFrm");
     let idRol = null;
     tablaRol.onclick = async function(e){
         if (e.target.classList.contains("btn-outline-info")){
@@ -59,15 +68,42 @@ function loadPage(){
                     const rol = response.success;
                     txtRol.value = rol.nombreRol;
                     idRol = rol.id;
+                    btnGuardarForm.querySelector("i").className = "fas fa-pencil-alt";
                     btnGuardarForm.querySelector("span").textContent = "Editar";
                 }
             } catch (error) {
                 general.cargandoPeticion(e.target, 'fas fa-pencil-alt', false);
                 idRol = null;
                 console.error(error);
-                alertify.error("error al obtener ")
+                alertify.error("error al obtener el rol para editar")
             }
-
+        }
+        if (e.target.classList.contains("btn-outline-primary")){
+            let data = new FormData();
+            data.append("accion","verModulos");
+            data.append("rol",e.target.dataset.rol);
+            general.cargandoPeticion(e.target, general.claseSpinner, true);
+            try {
+                const response = await general.funcfetch("rol/accion",data);
+                if(response.session){
+                    return alertify.alert([...general.alertaSesion],() => {window.location.reload()});
+                }
+                if(response.modulos){
+                    idRol = e.target.dataset.rol;
+                    response.modulos.forEach(m => {
+                        document.querySelector(`#modulosBuscar [data-modulo="${m.moduloFk}"]`).checked = true;
+                    });
+                    txtInfoSeleccion.textContent = response.modulos.length;
+                    btnGuardarRol.children[1].textContent = "Editar";
+                    $('#modalRol').modal("show");
+                }
+            } catch (error) {
+                idRol = null;
+                console.error(error);
+                alertify.error("error al obtener los modulos");
+            }finally{
+                general.cargandoPeticion(e.target, 'fas fa-pencil-alt', false);
+            }
         }
         if (e.target.classList.contains("btn-outline-danger")) {
             alertify.confirm("Alerta","¿Deseas eliminar este rol?",async () => {
@@ -98,7 +134,7 @@ function loadPage(){
         }
     }
     formRol.onreset = function(e){
-        btnGuardarForm.querySelector("span").textContent = "Guardar";
+        btnGuardarForm.querySelector("span").textContent = "Siguiente";
         idRol = null;
     }
     const txtBuscador = document.querySelector("#buscarModulo");
@@ -120,14 +156,56 @@ function loadPage(){
         }
         general.seleccionarCheckbox(txtCheckebox, selecionarTodo);
     }
-    const txtInfoSeleccion = document.querySelector("#textoInfoSelecionado");
     const selecionarTodo = document.querySelector("#selecionarTodoCheckbox");
+    $('#modalRol').on("hidden.bs.modal",function(e){
+        selecionarTodo.checked = false;
+        for (const selcionador of document.querySelectorAll(txtCheckebox)) {
+            selcionador.parentElement.parentElement.parentElement.classList.remove("d-none");
+            selcionador.checked = false;
+        }
+        txtInfoSeleccion.textContent = 0;
+        btnGuardarRol.children[1].textContent = "Guardar";
+        idRol = null;
+    });
     const txtCheckebox = "#modulosBuscar .custom-control-input";
     for (const selcionador of document.querySelectorAll(txtCheckebox)) {
         selcionador.addEventListener("change", function (e) {
             txtInfoSeleccion.textContent = general.seleccionarCheckbox(txtCheckebox, selecionarTodo);
         });
     }
+    btnGuardarRol.addEventListener("click",function(e){
+        const claseSelecionada = document.querySelectorAll(txtCheckebox+":checked");
+        if(!claseSelecionada.length){
+            return alertify.alert("Mensaje","Debe selecionar al menos un módulo");
+        }
+        let datos = new FormData();
+        datos.append("accion",!idRol ? "nuevoRol" : "editarModuloRol");
+        datos.append("rol",!idRol ? txtRol.value : idRol);
+        for (const checkbox of claseSelecionada) {
+            datos.append("modulo[]",checkbox.dataset.modulo);
+        }
+        const msjRol = !idRol ? "<p>Se procederá a crear el rol <b>" + txtRol.value + "</b> con un total de <b>" + claseSelecionada.length + " modulos</b><br>¿Deseas continuar?</p>" : "¿Estas seguro de actualizar los módulos?";
+        alertify.confirm("Mensaje",msjRol,async () => {
+            general.cargandoPeticion(btnGuardarRol, general.claseSpinner, true);
+            try {
+                const response = await general.funcfetch("rol/accion", datos);
+                if (response.session) {
+                    return alertify.alert([...general.alertaSesion], () => { window.location.reload() });
+                }
+                if (response.success) {
+                    alertify.success(response.success);
+                    tablaRolDataTable.draw();
+                    formRol.reset();
+                    $('#modalRol').modal("hide");
+                }
+            } catch (error) {
+                console.error(error);
+                alertify.error("error al crear un nuevo rol");
+            }finally{
+                general.cargandoPeticion(btnGuardarRol, 'fas fa-save', false);
+            }
+        },() => {})
+    });
     selecionarTodo.addEventListener("change",function(e){
         for (const selcionador of document.querySelectorAll(txtCheckebox)) {
             if (selcionador.parentElement.parentElement.parentElement.classList.contains("d-none")){
@@ -139,33 +217,33 @@ function loadPage(){
     });
     formRol.onsubmit = async function(e){
         e.preventDefault();
-        $('#modalRol').modal("show");
-        return
-        let datos = new FormData(this);
-        datos.append("accion", idRol != null ? "editarRol" : 'nuevoRol');
-        if(idRol != null){
+        if(idRol){
+            let datos = new FormData(this);
+            datos.append("accion","editarRol");
             datos.append("rolId", idRol);
-        }
-        try {
             general.cargandoPeticion(btnGuardarForm, general.claseSpinner, true);
-            const response = await general.funcfetch("rol/accion", datos);
-            general.cargandoPeticion(btnGuardarForm, 'fas fa-save', false);
-            if (response.session) {
-                return alertify.alert([...general.alertaSesion], () => { window.location.reload() });
-            }
-            if (response.success) {
-                alertify.success(response.success);
-                tablaRolDataTable.draw();
-                formRol.reset();
+            try {
+                const response = await general.funcfetch("rol/accion", datos);
+                if (response.session) {
+                    return alertify.alert([...general.alertaSesion], () => { window.location.reload() });
+                }
+                if (response.success) {
+                    alertify.success(response.success);
+                    tablaRolDataTable.draw();
+                    formRol.reset();
+                }
+            } catch (error) {
+                console.error(error);
+                alertify.error("error al editar el nombre del rol");
+            }finally{
                 idRol = null;
+                general.cargandoPeticion(btnGuardarForm, 'fas fa-hand-point-right', false);
+                btnGuardarRol.children[1].textContent = "Siguiente";
+                // btnGuardarRol.querySelector("i").className = "fas fa-hand-point-right";
             }
-        } catch (error) {
-            general.cargandoPeticion(btnGuardarForm, 'fas fa-save', false);
-            idRol = null;
-            console.error(error);
-            alertify.error(idRol != null ? "error al editar el rol" : 'error al agregar un rol')
+        }else{
+            $('#modalRol').modal("show");
         }
-
     }
 }
 window.addEventListener("DOMContentLoaded",loadPage);

@@ -18,6 +18,7 @@ use Yajra\DataTables\Facades\DataTables;
 class Usuario extends Controller
 {
     public $errorPeticion = ["error" => "solicitud invalida"];
+    private $moduloUsuario = "admin.usuario.index";
     public function index(): View
     {
         $modulos = $this->obtenerModulos();
@@ -62,6 +63,10 @@ class Usuario extends Controller
     {
         if(!$request->ajax()){
             return response()->json(['error' => 'error en la petición']);
+        }
+        $accessModulo = $this->validarXmlHttpRequest($this->moduloUsuario);
+        if(isset($accessModulo['session'])){
+            return response()->json($accessModulo);
         }
         switch ($request->acciones) {
             case 'agregar':
@@ -140,6 +145,10 @@ class Usuario extends Controller
     }
     public function listarUsuarios()
     {
+        $verif = $this->validarXmlHttpRequest($this->moduloUsuario);
+        if(isset($verif['session'])){
+            return redirect()->route("home"); 
+        }
         $modulos = $this->obtenerModulos();
         $roles = Rol::all();
         $areas = Area::all();

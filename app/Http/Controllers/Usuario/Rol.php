@@ -14,21 +14,29 @@ use Yajra\DataTables\Facades\DataTables;
 class Rol extends Controller
 {
     private $userControler = null;
+    private $moduloRol = "admin.rol.index";
     function __construct()
     {
         $this->userControler = new Usuario();
     }
-    public function viewRol(Request $request) : View
+    public function viewRol(Request $request)
     {
+        $verif = $this->userControler->validarXmlHttpRequest($this->moduloRol);
+        if(isset($verif['session'])){
+            return redirect()->route("home"); 
+        }
         $modulos = $this->userControler->obtenerModulos();
         $modulosLista = Modulo::with("grupos")->orderBy("grupoFk")->get();
-        // dd($modulosLista);
         return view("intranet.users.roles",compact("modulos", "modulosLista"));
     }
     public function accionesRoles(Request $request)
     {
         if(!$request->ajax()){
             return response()->json(['error' => 'error en la consulta']);
+        }
+        $accessModulo = $this->userControler->validarXmlHttpRequest($this->moduloRol);
+        if(isset($accessModulo['session'])){
+            return response()->json($accessModulo);
         }
         switch ($request->accion) {
             case 'obtener':
@@ -39,12 +47,24 @@ class Rol extends Controller
                 $rol = ModelsRol::find($request->rol);
                 return response()->json(['success' => $rol]);
             break;
+            case 'editarModuloRol':
+                $rol = ModelsRol::find($request->rol);
+                $rol->modulos()->detach();
+                $rol->modulos()->attach($request->modulo);
+                return response()->json(['success' => 'modulos actualizados correctamente']);
+                // ->modulos()->newPivotQuery()->upsert($moduloRol,['moduloFk','rolFk'],['moduloFk']);
+            break;
             case 'nuevoRol':
-                ModelsRol::create(['nombreRol' => $request->rol, 'claseIcono' => $request->icono]);
+                $rol = ModelsRol::create(['nombreRol' => $request->rol]);
+                $rol->modulos()->attach($request->modulo);
                 return response()->json(['success' => 'rol agregado correctamente']);
             break;
+            case 'verModulos':
+                $modulos = ModelsRol::find($request->rol)->modulos()->select("modulo_roles.moduloFk")->get()->makeHidden("pivot");
+                return response()->json(['modulos' => $modulos]);
+            break;
             case 'editarRol':
-                ModelsRol::where('id',$request->rolId)->update(['nombreRol' => $request->rol, 'claseIcono' => $request->icono]);
+                ModelsRol::where('id',$request->rolId)->update(['nombreRol' => $request->rol]);
                 return response()->json(['success' => 'rol actualizado correctamente']);
             break;
             case 'eliminar':

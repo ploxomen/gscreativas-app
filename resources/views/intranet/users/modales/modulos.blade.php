@@ -52,7 +52,7 @@
                         <tr>
                             <td class="text-center">
                                 <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="idSelectModulo{{$modulo->id}}">
+                                <input type="checkbox" class="custom-control-input" data-modulo="{{$modulo->id}}" id="idSelectModulo{{$modulo->id}}">
                                 <label class="custom-control-label" for="idSelectModulo{{$modulo->id}}"></label>
                                 </div>
                             </td>

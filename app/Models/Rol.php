@@ -21,6 +21,6 @@ class Rol extends Model
     }
     public function modulos()
     {
-        return $this->belongsToMany(Modulo::class, 'modulo_roles', 'rolFk', 'moduloFk');
+        return $this->belongsToMany(Modulo::class, 'modulo_roles', 'rolFk', 'moduloFk')->withTimestamps();
     }
 }

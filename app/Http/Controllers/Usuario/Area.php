@@ -13,12 +13,17 @@ use Yajra\DataTables\Facades\DataTables;
 class Area extends Controller
 {
     private $userControler = null;
+    private $moduloArea = "admin.area.index";
     function __construct()
     {
         $this->userControler = new Usuario();
     }
-    public function viewArea(Request $request): View
+    public function viewArea(Request $request)
     {
+        $verif = $this->userControler->validarXmlHttpRequest($this->moduloArea);
+        if(isset($verif['session'])){
+            return redirect()->route("home"); 
+        }
         $modulos = $this->userControler->obtenerModulos();
         return view("intranet.users.area",compact("modulos"));
     }
@@ -26,6 +31,10 @@ class Area extends Controller
     {
         if (!$request->ajax()) {
             return response()->json(['error' => 'error en la consulta']);
+        }
+        $accessModulo = $this->userControler->validarXmlHttpRequest($this->moduloArea);
+        if(isset($accessModulo['session'])){
+            return response()->json($accessModulo);
         }
         switch ($request->accion) {
             case 'obtener':

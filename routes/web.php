@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\Modulos;
 use App\Http\Controllers\Producto\Categoria;
 use App\Http\Controllers\Producto\Marca;
 use App\Http\Controllers\Producto\MisProductos;
+use App\Http\Controllers\Producto\Perecedero;
 use App\Http\Controllers\Producto\Presentacion;
 use App\Http\Controllers\Usuario;
 use App\Http\Controllers\Usuario\Area;
@@ -33,6 +35,14 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
             Route::post('crear', [Marca::class, 'store']);
             Route::post('editar/{marca}', [Marca::class, 'update']);
             Route::delete('eliminar/{marca}', [Marca::class, 'destroy']);
+        });
+        Route::prefix('perecederos')->group(function () {
+            Route::get('/', [Perecedero::class, 'index'])->name('admin.perecedero.index');
+            Route::post('listar', [Perecedero::class, 'listar']);
+            Route::get('listar/{perecedero}', [Perecedero::class, 'show']);
+            Route::post('crear', [Perecedero::class, 'store']);
+            Route::post('editar/{perecedero}', [Perecedero::class, 'update']);
+            Route::delete('eliminar/{perecedero}', [Perecedero::class, 'destroy']);
         });
         Route::prefix('categoria')->group(function () {
             Route::get('/', [Categoria::class, 'index'])->name('admin.categoria.index');
@@ -72,6 +82,8 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
         Route::get('cerrar/sesion', [Usuario::class, 'logoauth'])->name('cerrarSesion');
         Route::get('rol',[Rol::class,'viewRol'])->name('admin.rol.index');
         Route::get('area', [Area::class, 'viewArea'])->name('admin.area.index');
+        Route::get('modulo', [Modulos::class, 'index'])->name('admin.modulos.index');
+        Route::post('modulo/accion', [Modulos::class, 'accionesModulos']);
         Route::post('rol/accion', [Rol::class, 'accionesRoles']);
         Route::post('area/accion', [Area::class, 'accionesArea']);
 
