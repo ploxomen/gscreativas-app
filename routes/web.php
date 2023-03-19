@@ -10,6 +10,7 @@ use App\Http\Controllers\Usuario;
 use App\Http\Controllers\Usuario\Area;
 use App\Http\Controllers\Usuario\Rol;
 use App\Http\Controllers\ventas;
+use App\Http\Controllers\Ventas\Clientes;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
@@ -72,6 +73,14 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
     });
     Route::prefix('ventas')->group(function () {
         Route::get('registrar', [Usuario::class, 'cambioRol'])->name('ventas.registrar.index');
+        Route::prefix('clientes')->group(function () {
+            Route::get('/', [Clientes::class, 'index'])->name('admin.ventas.clientes.index');
+            Route::post('listar', [Clientes::class, 'listar']);
+            Route::get('listar/{cliente}', [Clientes::class, 'show']);
+            Route::post('crear', [Clientes::class, 'store']);
+            Route::post('editar/{cliente}', [Clientes::class, 'update']);
+            Route::delete('eliminar/{cliente}', [Clientes::class, 'destroy']);
+        });
     });
     Route::prefix('usuarios')->group(function(){
         Route::post('accion',[Usuario::class,'getArea']);

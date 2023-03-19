@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsuariosTable extends Migration
+class CreateClientesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,27 +13,20 @@ class CreateUsuariosTable extends Migration
      */
     public function up()
     {
-        Schema::create('usuarios', function (Blueprint $table) {
+        Schema::create('clientes', function (Blueprint $table) {
             $table->id();
-            $table->string("correo");
+            $table->string("nombreCliente");
             $table->unsignedBigInteger("tipoDocumento")->nullable();
             $table->string("nroDocumento")->nullable();
-            $table->string("nombres");
-            $table->string("apellidos");
-            $table->string("password");
             $table->string("telefono")->nullable();
             $table->string("celular")->nullable();
+            $table->string("correo")->nullable();
             $table->string("direccion")->nullable();
-            $table->date("fechaCumple")->nullable();
-            $table->string("recordarToken")->nullable();
-            $table->string("urlAvatar",250)->nullable();    
-            $table->char("sexo",1)->nullable();
-            $table->integer("estado")->default(2);
-            $table->unsignedBigInteger("areaFk");
+            $table->decimal("limteCredito",11,2)->nullable();
             $table->foreign("tipoDocumento")->references("id")->on("tipo_documento");
-            $table->foreign("areaFk")->references("id")->on("area");
+            $table->integer("estado")->default(1);
             $table->dateTimeTz("fechaCreada");
-            $table->dateTimeTz("fechaActualizada");
+            $table->dateTimeTz("fechaActualizada");        
         });
     }
 
@@ -44,6 +37,6 @@ class CreateUsuariosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('usuarios');
+        Schema::dropIfExists('clientes');
     }
 }

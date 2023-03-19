@@ -18,11 +18,10 @@
                 <div class="form-group col-12 col-md-6">
                     <label for="idValorModaltipoDocumento">Tipo de documento</label>
                     <select name="tipoDocumento" id="idValorModaltipoDocumento" class="form-control">
-                        <option value="">Ninguno</option>
-                        <option value="D.N.I">D.N.I</option>
-                        <option value="CARNET DE EXTRANJERÍA">CARNET DE EXTRANJERÍA</option>
-                        <option value="PASAPORTE">PASAPORTE</option>
-                        <option value="R.U.C">R.U.C</option>
+                        <option></option>
+                        @foreach ($tiposDocumentos as $tipoDocumento)
+                            <option value="{{$tipoDocumento->id}}">{{$tipoDocumento->documento}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group col-12 col-md-6">

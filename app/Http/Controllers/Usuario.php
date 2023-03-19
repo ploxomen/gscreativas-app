@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Producto\MisProductos;
 use App\Models\Area;
 use App\Models\Rol;
+use App\Models\TipoDocumento;
 use App\Models\User;
 use App\Models\UsuarioRol;
 use Illuminate\Http\Request;
@@ -152,7 +153,8 @@ class Usuario extends Controller
         $modulos = $this->obtenerModulos();
         $roles = Rol::all();
         $areas = Area::all();
-        return view('intranet.users.lista',compact("roles","areas","modulos"));
+        $tiposDocumentos = TipoDocumento::where('estado',1)->get();
+        return view('intranet.users.lista',compact("roles","areas","modulos","tiposDocumentos"));
     }
     public function retaurarContra() : View
     {
