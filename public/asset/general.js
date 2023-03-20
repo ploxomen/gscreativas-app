@@ -21,6 +21,9 @@ class General{
             body: dato
         }).then(response => response.json())
     }
+    validarVacio(dato) {
+        return !dato ? "Sin Registro" : dato;
+    }
     seleccionarCheckbox(claseSeleccionar,$selecionarTodo){
         let cantidadClase = 0;
         const claseSeleccionar2 = document.querySelectorAll(claseSeleccionar);

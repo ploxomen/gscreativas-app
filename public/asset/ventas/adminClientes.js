@@ -3,20 +3,12 @@ function loadPage(){
     for (const swhitchOn of document.querySelectorAll(".change-switch")) {
         swhitchOn.addEventListener("change",gen.switchs);
     }
-    function validarVacio(dato){
-        return !dato ? "Sin Registro" : dato;
-    }
     const tablaClientes = document.querySelector("#tablaClientes");
     const tablaClientesDatatable = $(tablaClientes).DataTable({
         ajax: {
             url: 'clientes/listar',
             method: 'POST',
-            headers: gen.requestJson,
-            data: function (d) {
-                // d.acciones = 'obtener';
-                // d.area = $("#cbArea").val();
-                // d.rol = $("#cbRol").val();
-            }
+            headers: gen.requestJson
         },
         columns: [{
             data: 'id',
@@ -26,35 +18,35 @@ function loadPage(){
         },
         {
             data: 'tipo_documento',
-            render : data => validarVacio(!data ? null : data.documento)
+            render : data => gen.validarVacio(!data ? null : data.documento)
         },
         {
             data: 'nroDocumento',
-            render : validarVacio
+            render : gen.validarVacio
         },
         {
             data: 'nombreCliente',
-            render : validarVacio
+            render : gen.validarVacio
         },
         {
             data: 'celular',
-            render : validarVacio
+            render : gen.validarVacio
         },
         {
             data: 'telefono',
-            render : validarVacio
+            render : gen.validarVacio
         },
         {
             data: 'correo',
-            render : validarVacio
+            render : gen.validarVacio
         },
         {
             data: 'direccion',
-            render : validarVacio
+            render : gen.validarVacio
         },
         {
             data: 'limteCredito',
-            render : validarVacio
+            render : gen.validarVacio
         },
         {
             data : 'estado',
@@ -121,7 +113,6 @@ function loadPage(){
         switchEstado.parentElement.querySelector("label").textContent = "VIGENTE";
         formCliente.reset();
         $('#agregarCliente .select2-simple').trigger("change");
-        prevImagen.src = window.origin + "/asset/img/imgprevproduc.png";
     });
     const switchEstado = document.querySelector("#idModalestado");
     btnModalSave.onclick = e => document.querySelector("#btnFrmEnviar").click();
@@ -143,6 +134,7 @@ function loadPage(){
                         const dom = document.querySelector("#idModal" + key);
                         if (key == "estado"){
                             switchEstado.checked = valor === 1 ? true : false;
+                            switchEstado.parentElement.querySelector("label").textContent = valor === 1 ? "VIGENTE" : "DESCONTINUADO";
                             continue;
                         }
                         dom.value = valor;

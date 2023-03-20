@@ -11,6 +11,7 @@ use App\Http\Controllers\Usuario\Area;
 use App\Http\Controllers\Usuario\Rol;
 use App\Http\Controllers\ventas;
 use App\Http\Controllers\Ventas\Clientes;
+use App\Http\Controllers\Ventas\Comprobantes;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
@@ -73,6 +74,14 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
     });
     Route::prefix('ventas')->group(function () {
         Route::get('registrar', [Usuario::class, 'cambioRol'])->name('ventas.registrar.index');
+        Route::prefix('comprobantes')->group(function () {
+            Route::get('/', [Comprobantes::class, 'index'])->name('admin.ventas.comprobantes.index');
+            Route::post('listar', [Comprobantes::class, 'listar']);
+            Route::get('listar/{comprobante}', [Comprobantes::class, 'show']);
+            Route::post('crear', [Comprobantes::class, 'store']);
+            Route::post('editar/{comprobante}', [Comprobantes::class, 'update']);
+            Route::delete('eliminar/{comprobante}', [Comprobantes::class, 'destroy']);
+        });
         Route::prefix('clientes')->group(function () {
             Route::get('/', [Clientes::class, 'index'])->name('admin.ventas.clientes.index');
             Route::post('listar', [Clientes::class, 'listar']);
