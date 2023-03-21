@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Usuario;
 use App\Models\Clientes;
 use App\Models\Comprobantes;
+use App\Models\Perecedero;
 use App\Models\Productos;
 use App\Models\TipoDocumento;
 use Illuminate\Http\Request;
@@ -42,6 +43,20 @@ class Ventas extends Controller
             return response()->json(['alerta' => 'El porducto ' . $producto->nombreProducto . ' ha sido descontinuado o no cuenta con stock suficiente']);
         }
         $producto->urlProductos = !empty($producto->urlImagen) ? route("urlImagen",["productos",$producto->urlImagen]) : null;
-        return response()->json(['producto' => $producto->makeHidden("fechaCreada","fechaActualizada")]);
+        $perecederos = Perecedero::select("id","cantidad","vencimiento")->where(['productoFk'=>$producto->id,'estado' => 1]);
+        $nuevoPerecedero = [];
+        if($perecederos->sum("cantidad") != $producto->cantidad || $perecederos->sum("cantidad") === 0){
+            $nuevoPerecedero[] = [
+                'fecha' => 'Ninguno',
+                'valor' => 0
+            ];
+        }
+        foreach ($perecederos->get() as $perecedero) {
+            $nuevoPerecedero[] = [
+                'fecha' => date('d/m/Y',strtotime($perecedero->vencimiento)),
+                'valor' => $perecedero->id
+            ];
+        }
+        return response()->json(['producto' => $producto->makeHidden("fechaCreada","fechaActualizada"),'perecederos' => $nuevoPerecedero]);
     }
 }

@@ -146,7 +146,8 @@ table thead tr th{
 table tbody tr td{
     vertical-align: middle !important;
 }
-button i{
+button i,
+button span{
     pointer-events: none;
     user-select: none;
 }
