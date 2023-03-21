@@ -70,4 +70,10 @@ class General{
         const label = e.target.parentElement.querySelector("label");
         label.textContent = e.target.checked ? e.target.dataset.selected : e.target.dataset.noselected;
     }
+    monedaSoles(numero){
+        return parseFloat(numero).toLocaleString("es-PE",{
+            style: "currency",
+            currency: "PEN"
+        })
+    }
 }

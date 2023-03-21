@@ -2,7 +2,13 @@ function loadPage(){
     $(".select2-simple").select2({
         theme: 'bootstrap',
         width: '100%',
-        placeholder: "seleccione una opción"    
+        placeholder: !$(this).data("placeholder") ? "Seleccione una opción" : $(this).data("placeholder"),   
+    });
+    $(".select2-new").select2({
+        theme: 'bootstrap',
+        width: '100%',
+        placeholder: $(this).data("placeholder"),
+        tags : true   
     });
     const liActive = document.querySelector(".activeli");
     if(liActive && !liActive.parentElement.classList.contains("show")){

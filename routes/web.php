@@ -9,9 +9,9 @@ use App\Http\Controllers\Producto\Presentacion;
 use App\Http\Controllers\Usuario;
 use App\Http\Controllers\Usuario\Area;
 use App\Http\Controllers\Usuario\Rol;
-use App\Http\Controllers\ventas;
 use App\Http\Controllers\Ventas\Clientes;
 use App\Http\Controllers\Ventas\Comprobantes;
+use App\Http\Controllers\Ventas\Ventas;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
@@ -73,7 +73,10 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
        
     });
     Route::prefix('ventas')->group(function () {
-        Route::get('registrar', [Usuario::class, 'cambioRol'])->name('ventas.registrar.index');
+        Route::prefix('administrador')->group(function () {
+            Route::get('listar/{producto}', [Ventas::class, 'verProductoAsignarVenta']);
+        });
+        Route::get('registrar', [Ventas::class, 'indexRegistroVentas'])->name('ventas.registrar.index');
         Route::prefix('comprobantes')->group(function () {
             Route::get('/', [Comprobantes::class, 'index'])->name('admin.ventas.comprobantes.index');
             Route::post('listar', [Comprobantes::class, 'listar']);
