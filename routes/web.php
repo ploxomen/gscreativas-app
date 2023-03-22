@@ -75,8 +75,11 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
     Route::prefix('ventas')->group(function () {
         Route::prefix('administrador')->group(function () {
             Route::get('listar/{producto}', [Ventas::class, 'verProductoAsignarVenta']);
+            Route::get('listar/comprobante/{comprobante}', [Ventas::class, 'verComprobante']);
+            Route::get('listar/cliente/{cliente}', [Ventas::class, 'verCliente']);
         });
         Route::get('registrar', [Ventas::class, 'indexRegistroVentas'])->name('ventas.registrar.index');
+        Route::post('registrar', [Ventas::class, 'registrarVenta']);
         Route::prefix('comprobantes')->group(function () {
             Route::get('/', [Comprobantes::class, 'index'])->name('admin.ventas.comprobantes.index');
             Route::post('listar', [Comprobantes::class, 'listar']);

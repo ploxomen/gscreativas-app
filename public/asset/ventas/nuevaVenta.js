@@ -75,6 +75,9 @@ function loadPage() {
             const indexProducto = listaProductos.findIndex(p => p.idProducto == $(this).val() && p.porMenor === swtichProductoMenor.checked);
             if (indexProducto < 0){
                 const response = await gen.funcfetch("administrador/listar/" + $(this).val(), null, "GET");
+                if(response.session){
+                    return alertify.alert([...gen.alertaSesion],() => {window.location.reload()});
+                }
                 if (response.alerta) {
                     return alertify.alert("Alerta", response.alerta);
                 }
@@ -105,6 +108,9 @@ function loadPage() {
                     for (const cambio of detalleTr.querySelectorAll(".cambio-detalle")) {
                         cambio.addEventListener("change", modificarCantidad);
                     }
+                    for (const cambioCv of detalleTr.querySelectorAll(".cambio-vencimiento")) {
+                        cambioCv.addEventListener("change", cambioVencimiento);
+                    }
                 }
             }else{
                 const textMayor = !swtichProductoMenor.checked ? "pormayor" : "pormenor";
@@ -126,7 +132,7 @@ function loadPage() {
         let tr = document.createElement("tr");
         const textMayor = !swtichProductoMenor.checked ? "pormayor" : "pormenor";
         let selectPerecedero = document.createElement("select");
-        selectPerecedero.className = "form-control form-control-sm";
+        selectPerecedero.className = "form-control form-control-sm cambio-vencimiento";
         vencimientos.forEach(v => {
             selectPerecedero.append(new Option(v.fecha,v.valor,false,false));
         });
@@ -145,17 +151,139 @@ function loadPage() {
         `
         return tr;
     }
+    let totales = 0, totalRecivido = 0;
+    const envioVenta = document.querySelector("#idVentaEnvio");
+    const txtVuelto = document.querySelector("#vueltoAdar");
+    envioVenta.addEventListener("change",function(e){
+        const valor = isNaN(parseFloat(this.value)) ? 0.00 : parseFloat(this.value);
+        sumarTotalDetalle();
+        this.value = valor.toFixed(2);
+    });
+    const txtMontoDado = document.querySelector("#idMontoDado");
+    const cbMetodoPago = document.querySelector("#idVentaPago");
+    txtMontoDado.addEventListener("change",function(e){
+        const valor = isNaN(parseFloat(this.value)) ? 0.00 : parseFloat(this.value);
+        let vuelto = 0.00;
+        if(cbMetodoPago.value == "A CREDITO"){
+            totalRecivido = valor;
+        }else{
+            totalRecivido = valor < totales ? totales : valor;
+            vuelto = valor < totales ? 0.00 : valor - totales;
+        }
+        this.value = totalRecivido.toFixed(2);
+        txtVuelto.textContent = gen.monedaSoles(vuelto);
+    });
+    function cambioVencimiento(e) {
+        const tr = e.target.parentElement.parentElement;
+        const valorPorMenor = tr.dataset.pormenor == "true" ? true : false;
+        const indexProducto = listaProductos.findIndex(p => p.idProducto == tr.dataset.producto && p.porMenor === valorPorMenor);
+        if(indexProducto < 0){
+            return alertify.error("producto no encontrado");
+        }
+        listaProductos[indexProducto].vencimientos = e.target.value;
+    }
+    document.querySelector("#idVentatipoComprobanteFk").addEventListener("change",async function(e){
+        try {
+            const response = await gen.funcfetch("administrador/listar/comprobante/" + this.value, null, "GET");
+            if(response.session){
+                return alertify.alert([...gen.alertaSesion],() => {window.location.reload()});
+            }
+            document.querySelector("#numeroVenta").value = response.comprobanteNumero;
+            document.querySelector("#SerieVenta").value = response.comprobanteSerie;
+        } catch (error) {
+            console.error(error);
+            alertify.error("error al obtener los comprobantes");
+        }
+    })
+    $("#idVentaCliente").on("select2:select",async function(e){
+        try {
+            const response = await gen.funcfetch("administrador/listar/cliente/" + $(this).val(), null, "GET");
+            if(response.session){
+                return alertify.alert([...gen.alertaSesion],() => {window.location.reload()});
+            }
+            document.querySelector("#tipoDocumentoCliente").value = response.cliente.tipoDocumento;
+            document.querySelector("#nroDocumentoCliente").value = response.cliente.nroDocumento;
+        } catch (error) {
+            console.error(error);
+            alertify.error("error al obtener los comprobantes");
+        }
+    });
+    const cbCuentaBanco = document.querySelector("#idCuentaBancaria");
+    const cbBilletraDigital = document.querySelector("#idVentaBilleteraDigital");
+    const txtNroOperacion = document.querySelector("#idVentaNumeroOperacion");
+    cbMetodoPago.addEventListener("change",function(e){
+        if(this.value == "EN EFECTIVO" || this.value == "A CREDITO"){
+            cbCuentaBanco.parentElement.hidden = true;
+            cbCuentaBanco.disabled = true;
+            cbBilletraDigital.parentElement.hidden = true;
+            cbBilletraDigital.disabled = true;
+            txtNroOperacion.parentElement.hidden = true;
+            txtNroOperacion.disabled = true;
+        }else if(this.value == "DEPOSITO EN CUENTA"){
+            cbBilletraDigital.parentElement.hidden = true;
+            cbBilletraDigital.disabled = true;
+            txtNroOperacion.parentElement.hidden = false;
+            txtNroOperacion.disabled = false;
+            cbCuentaBanco.parentElement.hidden = false;
+            cbCuentaBanco.disabled = false;
+        }else if(this.value == "CON TARJETA"){
+            cbCuentaBanco.parentElement.hidden = true;
+            cbCuentaBanco.disabled = true;
+            cbBilletraDigital.parentElement.hidden = true;
+            cbBilletraDigital.disabled = true;
+            txtNroOperacion.parentElement.hidden = false;
+            txtNroOperacion.disabled = false;
+        }else if(this.value == "BILLETERAS DIGITALES"){
+            cbCuentaBanco.parentElement.hidden = true;
+            cbCuentaBanco.disabled = true;
+            cbBilletraDigital.parentElement.hidden = false;
+            cbBilletraDigital.disabled = false;
+            txtNroOperacion.parentElement.hidden = false;
+            txtNroOperacion.disabled = false;
+        }
+    });
+    document.querySelector("#generarVenta").addEventListener("submit",async function(e){
+        e.preventDefault();
+        if(!listaProductos.length){
+            return alertify.alert("Mensaje","Para registrar una venta debe haber al menos un producto");
+        }
+        if(cbMetodoPago.value == "A CREDITO" && totalRecivido >= totales){
+            return alertify.alert("Mensaje","La venta se está registrando como <strong>A CREDITO</strong>, por lo tanto el monto RECIBIDO debe ser menor que el total a pagar");
+        }
+        console.log(totalRecivido , totales);
+        // return
+        if(cbMetodoPago.value != "A CREDITO" && totalRecivido < totales){
+            return alertify.alert("Mensaje","El monto recibido no debe ser menor que el total a pagar, por favor establesca un valor correcto para el monto recibido",()=>txtMontoDado.focus());
+        }
+        let datos = new FormData(this);
+        datos.append("lisProducos",JSON.stringify(listaProductos));
+        try {
+            let response = await gen.funcfetch("registrar",datos);
+            if(response.session){
+                return alertify.alert([...gen.alertaSesion],() => {window.location.reload()});
+            }
+            if(response.alerta){
+                return alertify.alert("Alerta",response.alerta);
+            }
+            if(response.success){
+                return alertify.alert("Mensaje",response.success,()=> window.location.reload());
+            }
+        } catch (error) {
+            console.error(error);
+            alertify.error("error al generar una nueva venta");
+        }
+    })
     function sumarTotalDetalle(){
-        let igv = 0,total = 0,descuento = 0;
+        let igv = 0,total = 0,descuento = 0, envio = isNaN(parseFloat(envioVenta.value)) ? 0.00 : parseFloat(envioVenta.value);
         listaProductos.forEach(dv => {
             descuento += dv.descuento;
             total += dv.subtotal;
             igv += !dv.igv ? 0 : (dv.subtotal * 0.18); 
         });
         total = total - descuento;
-        if(total < 0){
-            return alertify.error("el monto de la venta no debe ser menor a S/ 0.00");
-        }
+        totales = total + envio;
+        txtVuelto.textContent = ((totalRecivido - totales) < 0) ? "S/ 0.00" : gen.resetearMoneda((totalRecivido - totales).toFixed(2)); 
+        document.querySelector("#totalApagarEnvio").textContent = gen.resetearMoneda(totales.toFixed(2));
         document.querySelector("#tDetalleSubTotal").textContent = gen.resetearMoneda((total - igv).toFixed(2));
         document.querySelector("#tDetalleIgv").textContent = gen.resetearMoneda(igv.toFixed(2));
         document.querySelector("#tDetalleDescuento").textContent = "- " + gen.resetearMoneda(descuento.toFixed(2));
@@ -183,6 +311,10 @@ function loadPage() {
             case 'descuento':
                 listaProductos[indexProducto].descuento = valor;
                 listaProductos[indexProducto].subtotal = listaProductos[indexProducto].precio * listaProductos[indexProducto].cantidad;
+                if(listaProductos[indexProducto].subtotal < listaProductos[indexProducto].descuento){
+                    listaProductos[indexProducto].descuento = 0;
+                    e.target.value = "0.00";
+                }
             break;
         }
         if(listaProductos[indexProducto].subtotal < 0){

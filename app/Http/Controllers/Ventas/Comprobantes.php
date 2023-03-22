@@ -95,4 +95,16 @@ class Comprobantes extends Controller
             return response()->json(['error' => $th->getMessage()]);
         }
     }
+    public function incrementarComprobante($idComprobante)
+    {
+        $comprobante = ModelsComprobantes::find($idComprobante);
+        $utilizado = $comprobante->utilizados + 1;
+        if($utilizado >= $comprobante->fin){
+            $longitud = strlen($comprobante->serie);
+            $serie = intval($comprobante->serie);
+            $serie++;
+            return $comprobante->update(['serie' => str_pad($serie,$longitud,"0",STR_PAD_LEFT),'disponible' => ($comprobante->fin - $comprobante->inicio + 1),'utilizados' => 0]);
+        }
+        return $comprobante->update(['disponible' => $comprobante->disponible - 1,'utilizados' => $utilizado]);
+    }
 }

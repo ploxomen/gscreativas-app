@@ -112,7 +112,7 @@ function loadPage(){
             gen.cargandoPeticion(btnModalSave, gen.claseSpinner, true);
             const response = await gen.funcfetch(idProducto ? "producto/editar/" + idProducto : "producto/crear",datos);
             if(response.session){
-                return alertify.alert([...alertaSesion],() => {window.location.reload()});
+                return alertify.alert([...gen.alertaSesion],() => {window.location.reload()});
             }
             if(response.error){
                 return alertify.alert("Error",response.error);
