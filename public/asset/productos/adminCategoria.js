@@ -61,7 +61,7 @@ function loadPage(){
                 const response = await general.funcfetch("categoria/listar/" +e.target.dataset.categoria,null, "GET");
                 general.cargandoPeticion(e.target, 'fas fa-pencil-alt', false);
                 if(response.session){
-                    return alertify.alert([...alertaSesion],() => {window.location.reload()});
+                    return alertify.alert([...general.alertaSesion],() => {window.location.reload()});
                 }
                 if(response.success){
                     alertify.success("pendiente para editar");
@@ -118,7 +118,7 @@ function loadPage(){
             const response = await general.funcfetch(url, datos, "POST");
             general.cargandoPeticion(btnGuardarForm, 'fas fa-save', false);
             if (response.session) {
-                return alertify.alert([...alertaSesion], () => { window.location.reload() });
+                return alertify.alert([...general.alertaSesion], () => { window.location.reload() });
             }
             if (response.success) {
                 alertify.success(response.success);

@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Compras;
+use App\Http\Controllers\Compras\Proveedores;
 use App\Http\Controllers\Modulos;
 use App\Http\Controllers\Producto\Categoria;
 use App\Http\Controllers\Producto\Marca;
@@ -71,6 +73,27 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
             Route::delete('eliminar/{producto}', [MisProductos::class, 'destroy']);
         });
        
+    });
+    Route::prefix('compras')->group(function () {
+        Route::prefix('proveedores')->group(function () {
+            Route::get('/', [Proveedores::class, 'index'])->name("admin.compras.proveedores");
+            Route::post('contacto/eliminar', [Proveedores::class, 'eliminarContacto']);
+            Route::post('listar', [Proveedores::class, 'listar']);
+            Route::get('listar/{proveedor}', [Proveedores::class, 'show']);
+            Route::post('crear', [Proveedores::class, 'store']);
+            Route::delete('eliminar/{proveedor}', [Proveedores::class, 'destroy']);
+        });
+        Route::prefix('registrar')->group(function () {
+            Route::get('/', [Compras::class, 'indexNuevaCompra'])->name("admin.compras.nueva.compra");
+            Route::post('crear', [MisProductos::class, 'store']);
+        });
+        Route::prefix('listar')->group(function () {
+            Route::get('/', [MisProductos::class, 'index'])->name("admin.compras.mis.compras");
+        });
+        Route::prefix('historial')->group(function () {
+            Route::get('/', [MisProductos::class, 'index'])->name("admin.compras.historial");
+        });
+
     });
     Route::prefix('ventas')->group(function () {
         Route::prefix('administrador')->group(function () {

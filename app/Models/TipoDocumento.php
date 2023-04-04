@@ -20,4 +20,8 @@ class TipoDocumento extends Model
     {
         return $this->hasMany(User::class,'tipoDocumento');
     }
+    public function proveedores()
+    {
+        return $this->hasMany(Proveedores::class,'tipo_documento');
+    }
 }
