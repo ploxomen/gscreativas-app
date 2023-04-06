@@ -20,4 +20,8 @@ class Proveedores extends Model
     {
         return $this->belongsTo(TipoDocumento::class,'tipo_documento');
     }
+    public function compras()
+    {
+        return $this->hasMany(Compras::class, 'proveedorFk');
+    }
 }

@@ -59,6 +59,7 @@ class General{
             $numero.value =  (valor - cantidad).toFixed(fixed);
         }
     }
+    urlProductos = window.location.origin + "/intranet/storage/productos/"
     resetearMoneda(numero){
         const newNum = isNaN(parseFloat(numero)) ? 0 : parseFloat(numero);
         return newNum.toLocaleString('es-PE',{

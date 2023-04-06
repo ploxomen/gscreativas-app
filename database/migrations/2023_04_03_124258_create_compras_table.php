@@ -19,7 +19,10 @@ class CreateComprasTable extends Migration
             $table->unsignedBigInteger("comprobanteFk");
             $table->string("nroComprobante");
             $table->date("fechaComprobante");
-            $table->string("tipoCompra");
+            $table->string("tipoCompra")->nullable();
+            $table->decimal("importe")->nullable();
+            $table->decimal("igv")->nullable();
+            $table->decimal("total")->nullable();
             $table->integer("estado");
             $table->dateTimeTz("fechaCreada");
             $table->dateTimeTz("fechaActualizada");

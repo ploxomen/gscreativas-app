@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Compras;
+use App\Http\Controllers\Compras\Compras;
 use App\Http\Controllers\Compras\Proveedores;
 use App\Http\Controllers\Modulos;
 use App\Http\Controllers\Producto\Categoria;
@@ -85,13 +85,21 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
         });
         Route::prefix('registrar')->group(function () {
             Route::get('/', [Compras::class, 'indexNuevaCompra'])->name("admin.compras.nueva.compra");
-            Route::post('crear', [MisProductos::class, 'store']);
+            Route::get('consultar/{producto}', [Compras::class, 'consultarProductos']);
+            Route::post('crear', [Compras::class, 'storeCompra']);
         });
         Route::prefix('listar')->group(function () {
-            Route::get('/', [MisProductos::class, 'index'])->name("admin.compras.mis.compras");
+            Route::get('/', [Compras::class, 'listaComprasIndex'])->name("admin.compras.mis.compras");
+            Route::post('mostrar', [Compras::class, 'listaComprasTotales']);
+            Route::get('mostrar/{compra}', [Compras::class, 'obtenerEditar']);
+            Route::post('agregar', [Compras::class, 'agregarModificarCompra']);
+            Route::post('eliminar', [Compras::class, 'eliminarProductoCompra']);
+            Route::get('eliminar/compra/{compra}', [Compras::class, 'eliminarCompraCompleta']);
+
         });
         Route::prefix('historial')->group(function () {
-            Route::get('/', [MisProductos::class, 'index'])->name("admin.compras.historial");
+            Route::get('/', [Compras::class, 'indexHistorialProducto'])->name("admin.compras.historial");
+            Route::post('listar', [Compras::class, 'obtenerHistorial']);
         });
 
     });

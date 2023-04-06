@@ -208,7 +208,7 @@
                 </div>
             </div>
             <div class="col-12 form-group text-center">
-                <button type="submit" class="btn btn-outline-success btn-sm">
+                <button type="submit" class="btn btn-success btn-sm">
                     <i class="fas fa-shopping-basket"></i>
                     <span>Agregar venta</span>
                 </button>

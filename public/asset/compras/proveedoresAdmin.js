@@ -56,7 +56,7 @@ function loadPage(){
                     </small>
                 </button></div>`
             }
-        },
+        }
         ]
     });
     const listaContactos = document.querySelector("#listaContactosProveedor");
