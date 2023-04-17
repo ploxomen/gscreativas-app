@@ -112,10 +112,11 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
         Route::prefix('general')->group(function () {
             Route::get('/', [Ventas::class, 'verMisVentas'])->name("admin.ventas.index");
             Route::post('listar', [Ventas::class, 'listaMisVentas']);
-            Route::post('listar/{venta}', [Ventas::class, 'verVentasParaEditar']);
+            Route::get('listar/{venta}', [Ventas::class, 'verVentasParaEditar']);
             Route::post('listar/producto/{producto}', [Ventas::class, 'verProductoMisVentas']);
         });
         Route::get('registrar', [Ventas::class, 'indexRegistroVentas'])->name('ventas.registrar.index');
+        Route::get('comprobante/{venta}', [Ventas::class, 'verComprobanteVenta']);
         Route::post('registrar', [Ventas::class, 'registrarVenta']);
         Route::prefix('comprobantes')->group(function () {
             Route::get('/', [Comprobantes::class, 'index'])->name('admin.ventas.comprobantes.index');

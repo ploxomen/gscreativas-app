@@ -49,16 +49,16 @@
                     </select>
                 </div>
                 <div class="col-6 col-lg-4 col-xl-3 form-group">
-                    <label for="tipoDocumentoCliente" class="col-form-label col-form-label-sm">Tipo Documento</label>
-                    <select id="idModaltipoDocumentoCliente" class="form-control form-control-sm">
-                        <option value=""></option>
+                    <label for="idModalTipoDocumentoCliente" class="col-form-label col-form-label-sm">Tipo Documento</label>
+                    <select id="idModalTipoDocumentoCliente" class="form-control form-control-sm">
+                        <option value="">Ninguno</option>
                         @foreach ($tiposDocumentos as $tipoDocumento)
                             <option value="{{$tipoDocumento->id}}">{{$tipoDocumento->documento}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-6 col-lg-4 col-xl-3 form-group">
-                    <label for="nroDocumentoCliente" class="col-form-label col-form-label-sm">N° Documento</label>
+                    <label for="idModalnroDocumentoCliente" class="col-form-label col-form-label-sm">N° Documento</label>
                     <input type="tel" id="idModalnroDocumentoCliente" class="form-control form-control-sm">
                 </div>
                 <div class="col-12 form-group">
@@ -106,7 +106,7 @@
                         <tfoot class="text-right">
                             <tr>
                                 <td colspan="7">SubTotal</td>
-                                <td colspan="2" id="idModalsubTotal"></td>
+                                <td colspan="2" id="subTotalInfo"></td>
                             </tr>
                             <tr>
                                 <td colspan="7">IGV</td>
@@ -118,7 +118,7 @@
                             </tr>
                             <tr>
                                 <td colspan="7">Total</td>
-                                <td colspan="2" id="tDetalleTotal"></td>
+                                <td colspan="2" id="idModalsubTotal"></td>
                             </tr>
                         </tfoot>
                     </table>

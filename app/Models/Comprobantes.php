@@ -11,4 +11,9 @@ class Comprobantes extends Model
     protected $fillable = ['comprobante', 'serie', 'inicio', 'fin', 'disponibles', 'utilizados', 'estado'];
     const CREATED_AT = 'fechaCreada';
     const UPDATED_AT = 'fechaActualizada';
+
+    public function ventas()
+    {
+        return $this->hasMany(Ventas::class, 'tipoComprobanteFk');
+    }
 }

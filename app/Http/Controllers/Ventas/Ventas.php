@@ -14,6 +14,7 @@ use App\Models\VentaDetalle;
 use App\Models\Ventas as ModelsVentas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Yajra\DataTables\Facades\DataTables;
 
 class Ventas extends Controller
@@ -90,6 +91,18 @@ class Ventas extends Controller
         return view("intranet.ventas.misVentas", compact("modulos","comprobantes","numeroComprobante","clientes","tiposDocumentos","productos"));
 
     }
+    public function verComprobanteVenta($venta)
+    {
+        $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloGerarVentas);
+        $verif2 = $this->usuarioController->validarXmlHttpRequest($this->moduloMisVentas);
+        if (isset($verif['session']) && isset($verif2['session'])) {
+            return redirect()->route("home");
+        }
+        $customPaper = array(0, 0, 867.00, 283.80);
+        $ventas = ModelsVentas::find($venta);
+        $ventas->detalleVentas = VentaDetalle::detalleVenta(intval($venta));
+        return Pdf::loadView("intranet.ventas.reportes.comprobanteVenta",compact("ventas"))->setPaper($customPaper, "landscape")->stream();
+    }
     public function registrarVenta(Request $request, VentasComprobantes $comprobanteVenta)
     {
         $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloGerarVentas);
@@ -98,7 +111,6 @@ class Ventas extends Controller
         }
         $venta = $request->only("tipoComprobanteFk","fechaVenta","fechaVenta","metodoPago","metodoEnvio","envio","cuentaBancaria","numeroOperacion","billeteraDigital","montoPagado","clienteFk");
         $detalleVenta = json_decode($request->lisProducos);
-        dd($detalleVenta);
         DB::beginTransaction();
         try {
             $comprobante = Comprobantes::find($request->tipoComprobanteFk);
@@ -115,7 +127,7 @@ class Ventas extends Controller
                 $descuentoTotal = $descuentoTotal + $dVenta->descuento; 
                 $producto = Productos::find($dVenta->idProducto);
                 if($dVenta->vencimientos != '0'){
-                    $vencimiento = Perecedero::find($dVenta->vencimientos);
+                    $vencimiento = Perecedero::where(["vencimiento" => $dVenta->vencimientos,'productoFk' => $producto->id])->first();
                     if($vencimiento->cantidad < $dVenta->cantidad){
                         DB::rollBack();
                         return response()->json(['alerta' => "El producto " . $producto->nombreProducto . " con fecha de vencimiento " . date("d/m/Y",strtotime($vencimiento->vencimiento)) . " ha superado el stock de " . $producto->cantidad . " " . $producto->presentacion->siglas .", por favor disminuya la cantidad o elimine el producto"]);
@@ -135,13 +147,13 @@ class Ventas extends Controller
                 }
                 $disminuir = $producto->cantidad - $dVenta->cantidad;
                 $producto->update(['cantidad' => $disminuir]);
-                VentaDetalle::create(['ventaFk' => $dbVenta->id,'productoFk' => $dVenta->idProducto, 'costo' => $dVenta->precio,'cantidad' => $dVenta->cantidad,'importe' => $dVenta->subtotal,'igv' => empty($dVenta->igv) ? 0 : $dVenta->subtotal * 0.18,'descuento' => $dVenta->descuento, 'total' => $dVenta->subtotal - $dVenta->descuento,'fechaPerecedero' => $dVenta->vencimientos]);
+                VentaDetalle::create(['ventaFk' => $dbVenta->id,'productoFk' => $dVenta->idProducto, 'costo' => $dVenta->precio,'cantidad' => $dVenta->cantidad,'importe' => $dVenta->subtotal,'igv' => empty($dVenta->igv) ? 0 : $dVenta->subtotal * 0.18,'descuento' => $dVenta->descuento, 'total' => $dVenta->subtotal - $dVenta->descuento,'fechaPerecedero' => empty($dVenta->vencimientos) ? null : $dVenta->vencimientos]);
             }
-            $total = ($subTotal - $igvTotal) + floatval($request->envio) - $descuentoTotal;
+            $total = $subTotal + floatval($request->envio) - $descuentoTotal;
             $dbVenta->update(['subTotal' => $subTotal,'igvTotal' => $igvTotal,'descuentoTotal' => $descuentoTotal,'total' => $total, 'vuelto' => $request->metodoPago != "A CREDITO" ? floatval($request->montoPagado) - $total : 0]);
             $comprobanteVenta->incrementarComprobante($request->tipoComprobanteFk);
             DB::commit();
-            return response()->json(['success' => 'Venta agregada correctamente']);
+            return response()->json(['success' => $dbVenta->id]);
         } catch (\Throwable $th) {
             DB::rollBack();
             return response()->json(['error' => $th->getMessage(),'codigo' => $th->getCode(),'line' => $th->getLine()]);
@@ -153,8 +165,9 @@ class Ventas extends Controller
         if (isset($verif['session'])) {
             return response()->json(['session' => true]);
         }
-        $ventas = ModelsVentas::find($venta);
-        $ventas->detalleVentas = VentaDetalle::detalleVenta($venta);
+        $ventas = ModelsVentas::with("clientes:id,tipoDocumento,nroDocumento")->find($venta);
+        // dd($venta);
+        $ventas->detalleVentas = VentaDetalle::detalleVenta(intval($venta));
         return response()->json(['venta' => $ventas]);
     }
     public function verProductoMisVentas(Productos $producto)

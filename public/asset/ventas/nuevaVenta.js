@@ -266,7 +266,10 @@ function loadPage() {
                 return alertify.alert("Alerta",response.alerta);
             }
             if(response.success){
-                return alertify.alert("Mensaje",response.success,()=> window.location.reload());
+                return alertify.confirm("Mensaje", "Venta registrada correctamente. <br><strong>¿Deseas ver el comprobante?</strong>", () => {
+                    window.open(gen.urlVentaComprobante + response.success,"_blank");
+                    window.location.reload();
+                },() => {});
             }
         } catch (error) {
             console.error(error);
