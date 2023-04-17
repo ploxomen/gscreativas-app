@@ -23,6 +23,7 @@ class CreateVentasDetalleTable extends Migration
             $table->decimal("igv",11);
             $table->decimal("descuento",11);
             $table->decimal("total",11);
+            $table->date("fechaPerecedero")->nullable();
             $table->foreign("ventaFk")->references("id")->on("ventas");
             $table->foreign("productoFk")->references("id")->on("productos");
         });

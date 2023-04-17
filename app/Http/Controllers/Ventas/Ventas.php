@@ -14,11 +14,13 @@ use App\Models\VentaDetalle;
 use App\Models\Ventas as ModelsVentas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 
 class Ventas extends Controller
 {
     private $usuarioController;
     private $moduloGerarVentas = "ventas.registrar.index";
+    private $moduloMisVentas = "admin.ventas.index";
     function __construct()
     {
         $this->usuarioController = new Usuario();
@@ -43,25 +45,7 @@ class Ventas extends Controller
         if(isset($verif['session'])){
             return response()->json(['session' => true]); 
         }
-        if($producto->estado != 1 || $producto->cantidad === 0){
-            return response()->json(['alerta' => 'El porducto ' . $producto->nombreProducto . ' ha sido descontinuado o no cuenta con stock suficiente']);
-        }
-        $producto->urlProductos = !empty($producto->urlImagen) ? route("urlImagen",["productos",$producto->urlImagen]) : null;
-        $perecederos = Perecedero::select("id","cantidad","vencimiento")->where(['productoFk'=>$producto->id,'estado' => 1]);
-        $nuevoPerecedero = [];
-        if($perecederos->sum("cantidad") != $producto->cantidad || $perecederos->sum("cantidad") === 0){
-            $nuevoPerecedero[] = [
-                'fecha' => 'Ninguno',
-                'valor' => 0
-            ];
-        }
-        foreach ($perecederos->get() as $perecedero) {
-            $nuevoPerecedero[] = [
-                'fecha' => date('d/m/Y',strtotime($perecedero->vencimiento)),
-                'valor' => $perecedero->id
-            ];
-        }
-        return response()->json(['producto' => $producto->makeHidden("fechaCreada","fechaActualizada"),'perecederos' => $nuevoPerecedero]);
+        return response()->json($this->buscarProducto($producto));
     }
     public function verComprobante(Comprobantes $comprobante)
     {
@@ -82,6 +66,30 @@ class Ventas extends Controller
         $newCliente = $cliente->select("tipoDocumento","nroDocumento")->find($cliente->id);
         return response()->json(['cliente' => $newCliente]);
     }
+    public function listaMisVentas()
+    {
+        $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloMisVentas);
+        if (isset($verif['session'])) {
+            return response()->json(['session' => true]);
+        }
+        $listaVentas = ModelsVentas::listaVentas();
+        return DataTables::of($listaVentas)->toJson();
+    }
+    public function verMisVentas()
+    {
+        $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloMisVentas);
+        if (isset($verif['session'])) {
+            return redirect()->route("home");
+        }
+        $modulos = $this->usuarioController->obtenerModulos();
+        $comprobantes = Comprobantes::where('estado',1)->get();
+        $numeroComprobante = $comprobantes->find(1);
+        $tiposDocumentos = TipoDocumento::where('estado',1)->get(); 
+        $clientes = Clientes::where('estado',1)->get();
+        $productos = Productos::where('estado',1)->get();
+        return view("intranet.ventas.misVentas", compact("modulos","comprobantes","numeroComprobante","clientes","tiposDocumentos","productos"));
+
+    }
     public function registrarVenta(Request $request, VentasComprobantes $comprobanteVenta)
     {
         $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloGerarVentas);
@@ -90,6 +98,7 @@ class Ventas extends Controller
         }
         $venta = $request->only("tipoComprobanteFk","fechaVenta","fechaVenta","metodoPago","metodoEnvio","envio","cuentaBancaria","numeroOperacion","billeteraDigital","montoPagado","clienteFk");
         $detalleVenta = json_decode($request->lisProducos);
+        dd($detalleVenta);
         DB::beginTransaction();
         try {
             $comprobante = Comprobantes::find($request->tipoComprobanteFk);
@@ -126,9 +135,9 @@ class Ventas extends Controller
                 }
                 $disminuir = $producto->cantidad - $dVenta->cantidad;
                 $producto->update(['cantidad' => $disminuir]);
-                VentaDetalle::create(['ventaFk' => $dbVenta->id,'productoFk' => $dVenta->idProducto, 'costo' => $dVenta->precio,'cantidad' => $dVenta->cantidad,'importe' => $dVenta->subtotal,'igv' => empty($dVenta->igv) ? 0 : $dVenta->subtotal * 0.18,'descuento' => $dVenta->descuento, 'total' => $dVenta->subtotal - $dVenta->descuento]);
+                VentaDetalle::create(['ventaFk' => $dbVenta->id,'productoFk' => $dVenta->idProducto, 'costo' => $dVenta->precio,'cantidad' => $dVenta->cantidad,'importe' => $dVenta->subtotal,'igv' => empty($dVenta->igv) ? 0 : $dVenta->subtotal * 0.18,'descuento' => $dVenta->descuento, 'total' => $dVenta->subtotal - $dVenta->descuento,'fechaPerecedero' => $dVenta->vencimientos]);
             }
-            $total = $subTotal + floatval($request->envio) - $descuentoTotal;
+            $total = ($subTotal - $igvTotal) + floatval($request->envio) - $descuentoTotal;
             $dbVenta->update(['subTotal' => $subTotal,'igvTotal' => $igvTotal,'descuentoTotal' => $descuentoTotal,'total' => $total, 'vuelto' => $request->metodoPago != "A CREDITO" ? floatval($request->montoPagado) - $total : 0]);
             $comprobanteVenta->incrementarComprobante($request->tipoComprobanteFk);
             DB::commit();
@@ -137,5 +146,45 @@ class Ventas extends Controller
             DB::rollBack();
             return response()->json(['error' => $th->getMessage(),'codigo' => $th->getCode(),'line' => $th->getLine()]);
         }
+    }
+    public function verVentasParaEditar($venta)
+    {
+        $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloMisVentas);
+        if (isset($verif['session'])) {
+            return response()->json(['session' => true]);
+        }
+        $ventas = ModelsVentas::find($venta);
+        $ventas->detalleVentas = VentaDetalle::detalleVenta($venta);
+        return response()->json(['venta' => $ventas]);
+    }
+    public function verProductoMisVentas(Productos $producto)
+    {
+        $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloMisVentas);
+        if(isset($verif['session'])){
+            return response()->json(['session' => true]); 
+        }
+        return response()->json($this->buscarProducto($producto));
+    }
+    public function buscarProducto($producto)
+    {
+        if($producto->estado != 1 || $producto->cantidad === 0){
+            return ['alerta' => 'El porducto ' . $producto->nombreProducto . ' ha sido descontinuado o no cuenta con stock suficiente'];
+        }
+        $producto->urlProductos = !empty($producto->urlImagen) ? route("urlImagen",["productos",$producto->urlImagen]) : null;
+        $perecederos = Perecedero::select("id","cantidad","vencimiento")->where(['productoFk'=>$producto->id,'estado' => 1]);
+        $nuevoPerecedero = [];
+        if($perecederos->sum("cantidad") != $producto->cantidad || $perecederos->sum("cantidad") === 0){
+            $nuevoPerecedero[] = [
+                'fecha' => 'Ninguno',
+                'valor' => 0
+            ];
+        }
+        foreach ($perecederos->get() as $perecedero) {
+            $nuevoPerecedero[] = [
+                'fecha' => date('d/m/Y',strtotime($perecedero->vencimiento)),
+                'valor' => $perecedero->vencimiento
+            ];
+        }
+        return ['producto' => $producto->makeHidden("fechaCreada","fechaActualizada"),'perecederos' => $nuevoPerecedero];
     }
 }

@@ -101,7 +101,7 @@ function loadPage() {
             cambio.addEventListener("change", calcularImporte);
         }
     }
-    function calcularImporte(listaCompras){
+    function calcularImporte(){
         const indexListaCompra = listaCompras.findIndex(p => p.id == this.parentElement.parentElement.dataset.producto);
         if (indexListaCompra >= 0) {
             const trProducto = this.parentElement.parentElement;

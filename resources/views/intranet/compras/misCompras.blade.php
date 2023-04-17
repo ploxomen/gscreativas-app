@@ -2,6 +2,7 @@
 @section('head')
     <script src="{{asset('asset/general.js')}}"></script>
     @include('headDatatable')
+    <link rel="stylesheet" href="{{asset('asset/productos/pestilos.css')}}">
     <script src="{{asset('asset/compras/administracionCompras.js')}}"></script>
     <title>Mis Compras</title>
 @endsection
@@ -13,14 +14,6 @@
                 <h4 class="text-center text-primary my-2">Administración de compras</h4>
             </div>
         </div>
-        {{-- <div class="bg-white p-3 border">
-            <form action="">
-                <div class="form-group col-12 col-md-6 col-lg-4">
-                    <label for="productoBuscar" class="col-form-label col-form-label-sm">Producto</label>
-                    
-                </div>
-            </form>
-        </div> --}}
        <div class="bg-white p-3 border">
         <table class="table table-sm table-bordered" id="tablaCompras">
             <thead class="text-center">

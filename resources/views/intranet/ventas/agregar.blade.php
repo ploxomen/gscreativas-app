@@ -135,7 +135,7 @@
             </div>
             <div class="form-group col-12">
                 <fieldset class="bg-white px-3 border form-row">
-                    <legend class="bg-white d-inline-block w-auto px-2 border shadow-sm text-left legend-add">Pago</legend>
+                    <legend class="bg-white d-inline-block w-auto px-2 border shadow-sm text-left legend-add">Pago y Envío</legend>
                     {{-- <div class="form-group col-12">
                         <div class="custom-control custom-switch">
                             <input type="checkbox" name="estado" class="custom-control-input change-switch" data-selected="VENTA AL CONTADO" data-noselected="VENTA AL CREDITO" 
@@ -183,7 +183,7 @@
                         </select>
                     </div>
                     <div class="form-group col-12 col-md-3 col-xl-2 form-group">
-                        <label for="idVentaEnvio" class="col-form-label col-form-label-sm">Envio S/</label>
+                        <label for="idVentaEnvio" class="col-form-label col-form-label-sm">Envío S/</label>
                         <input type="number" name="envio" id="idVentaEnvio" step="0.01" min="0" value="0.00" class="form-control form-control-sm">
                     </div>
                 </fieldset>
