@@ -47,7 +47,7 @@ function loadPage(){
             {
                 data: 'descuentoTotal',
                 render: function (dato) {
-                    return !dato ? 'Sin descuento' : + " - " + general.monedaSoles(dato);
+                    return !dato ? 'Sin descuento' : " - " + general.monedaSoles(dato);
                 }
             },
             {

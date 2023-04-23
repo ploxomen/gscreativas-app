@@ -283,8 +283,7 @@ function loadPage() {
             total += dv.subtotal;
             igv += !dv.igv ? 0 : (dv.subtotal * 0.18); 
         });
-        total = total - descuento;
-        totales = total + envio;
+        totales = (total + envio)-descuento;
         txtVuelto.textContent = ((totalRecivido - totales) < 0) ? "S/ 0.00" : gen.resetearMoneda((totalRecivido - totales).toFixed(2)); 
         document.querySelector("#totalApagarEnvio").textContent = gen.resetearMoneda(totales.toFixed(2));
         document.querySelector("#tDetalleSubTotal").textContent = gen.resetearMoneda((total - igv).toFixed(2));

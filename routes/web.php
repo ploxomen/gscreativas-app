@@ -13,6 +13,7 @@ use App\Http\Controllers\Usuario\Area;
 use App\Http\Controllers\Usuario\Rol;
 use App\Http\Controllers\Ventas\Clientes;
 use App\Http\Controllers\Ventas\Comprobantes;
+use App\Http\Controllers\Ventas\Cotizacion;
 use App\Http\Controllers\Ventas\Ventas;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
@@ -134,6 +135,15 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
             Route::post('editar/{cliente}', [Clientes::class, 'update']);
             Route::delete('eliminar/{cliente}', [Clientes::class, 'destroy']);
         });
+    });
+    Route::prefix('cotizaciones')->group(function () {
+        Route::get('nuevo', [Cotizacion::class, 'indexNuevaCotizacion'])->name('cotizacion.registrar.index');
+        Route::get('comprobante/{cotizacion}', [Cotizacion::class, 'comprobanteCotizacion']);
+        Route::post('registrar', [Cotizacion::class, 'registrarCotizacion']);
+        Route::get('listar/producto/{producto}', [Cotizacion::class, 'obtenerProducto']);
+        Route::get('mostrar', [Cotizacion::class, 'verCotizacionesAdminIndex'])->name('admin.cotizaciones.index');
+        Route::post('listar', [Cotizacion::class, 'verCotizacionesAdmin']);
+        Route::delete('eliminar/{cotizacion}', [Cotizacion::class, 'eliminarCotizacion']);
     });
     Route::prefix('usuarios')->group(function(){
         Route::post('accion',[Usuario::class,'getArea']);

@@ -32,6 +32,10 @@ class Productos extends Model
     {
         return $this->belongsToMany(Compras::class, 'compras_detalle', 'productoFk', 'compraFk')->withTimestamps();
     }
+    public function cotizacion()
+    {
+        return $this->belongsToMany(Cotizacion::class, 'cotizacion_detalle', 'productoFk', 'cotizacionFk')->withTimestamps();
+    }
     public function scopeCantidadMaximaPerecedero($query,$id,$cantidad,$idPerecedero = null)
     {
         $producto = $query->where('id',$id);

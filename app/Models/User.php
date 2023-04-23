@@ -58,4 +58,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(TipoDocumento::class,'tipoDocumento');
     }
+    public function cotizador()
+    {
+        return $this->hasOne(Cotizacion::class, 'cotizadorUsuario');
+    }
 }

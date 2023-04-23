@@ -60,6 +60,7 @@ class General{
         }
     }
     urlVentaComprobante = window.origin + "/intranet/ventas/comprobante/";
+    urlCotizacionComprobante = window.origin + "/intranet/cotizaciones/comprobante/";
     urlProductos = window.location.origin + "/intranet/storage/productos/"
     resetearMoneda(numero){
         const newNum = isNaN(parseFloat(numero)) ? 0 : parseFloat(numero);
