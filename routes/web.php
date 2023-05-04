@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Caja;
 use App\Http\Controllers\Compras\Compras;
 use App\Http\Controllers\Compras\Proveedores;
 use App\Http\Controllers\Configuracion;
@@ -153,8 +154,12 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
         Route::post('listar', [Cotizacion::class, 'verCotizacionesAdmin']);
         Route::delete('eliminar/{cotizacion}', [Cotizacion::class, 'eliminarCotizacion']);
     });
+    Route::prefix('caja')->group(function () {
+        Route::get('nueva', [Caja::class, 'indexAbrirCaja'])->name("admin.caja.abrir");
+    });
     Route::prefix('usuarios')->group(function(){
         Route::post('accion',[Usuario::class,'getArea']);
+        Route::post('password',[Usuario::class,'cambioContrasena']);
         Route::get('cambio/rol/{rol}', [Usuario::class, 'cambioRol'])->name('cambiarRol');
         Route::get('miperfil', [Usuario::class, 'miPerfil'])->name('miPerfil');
         Route::post('miperfil/actualizar', [Usuario::class, 'actualizarPerfil']);

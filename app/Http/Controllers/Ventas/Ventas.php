@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Ventas;
 
+use App\Http\Controllers\Caja;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helpers;
 use App\Http\Controllers\Usuario;
 use App\Http\Controllers\Ventas\Comprobantes as VentasComprobantes;
 use App\Models\Clientes;
@@ -39,7 +41,9 @@ class Ventas extends Controller
         $tiposDocumentos = TipoDocumento::where('estado',1)->get(); 
         $clientes = Clientes::where('estado',1)->get();
         $productos = Productos::where('estado',1)->get();
-        return view("intranet.ventas.agregar", compact("modulos","comprobantes","numeroComprobante","clientes","tiposDocumentos","productos"));
+        $caja = (new Caja)->obtenerEstadoCaja();
+        $fechaLarga = (new Helpers)->fechaCompleta(date('Y-m-d'));
+        return view("intranet.ventas.agregar", compact("modulos","comprobantes","numeroComprobante","clientes","tiposDocumentos","productos","caja",'fechaLarga'));
     }
     public function verProductoAsignarVenta(Productos $producto)
     {

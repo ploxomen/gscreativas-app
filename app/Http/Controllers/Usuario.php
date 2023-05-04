@@ -57,8 +57,15 @@ class Usuario extends Controller
             DB::rollBack();
             return response()->json(['error' => $th->getMessage()]);
         }
-        
-        
+    }
+    public function cambioContrasena(Request $request)
+    {
+        $accessModulo = $this->validarXmlHttpRequest($this->moduloUsuario);
+        if(isset($accessModulo['session'])){
+            return response()->json($accessModulo);
+        }
+        User::find($request->usuario)->update(['password' => Hash::make($request->password_temp) ,'estado' => 2]);
+        return response()->json(['success' => 'contraseña restaurada correctamente']);
     }
     public function getArea(Request $request)
     {

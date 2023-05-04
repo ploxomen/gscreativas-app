@@ -62,4 +62,5 @@
     </div>
 </section>
 @include('intranet.users.modales.usuario')
+@include('intranet.users.modales.restaurarPass')
 @endsection

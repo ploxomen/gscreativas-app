@@ -1,4 +1,4 @@
-<div class="modal fade" id="usurioModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="usuarioRestaurar" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -8,12 +8,17 @@
           </button>
         </div>
         <div class="modal-body">
-            <form action="">
+            <form id="formRestaurar">
+              <div class="form-group">
+                <label for="id_password_temp">Contraseña temporal</label>
+                <input type="text" class="form-control" name="password_temp" required value="sistema{{date('Y')}}" data-value="sistema{{date('Y')}}" id="id_password_temp">
+              </div>
                 
+                <input type="submit" id="btnSubmitRest" hidden>
             </form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-primary" id="btnGuardarFrm">
+            <button type="button" class="btn btn-outline-primary" id="btnGuardarFrmRest">
                 <i class="fas fa-save"></i>
                 <span>Restaurar</span>
             </button>

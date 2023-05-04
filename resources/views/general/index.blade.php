@@ -37,6 +37,7 @@
                 @php
                     $usuario = auth()->user();
                     $urlPerfil = $usuario->sexo == "F" ? "mujer" : "hombre";
+                    $caja = (new App\Http\Controllers\Caja)->obtenerEstadoCaja();
                     if(!empty($usuario->urlAvatar)){
                         $urlPerfil = route("urlImagen",["avatars",$usuario->urlAvatar]);
                     }else{
@@ -106,6 +107,9 @@
                     
                 </div>
                 <div class="box-my">
+                    <div class="div">
+                        <span class="badge {{$caja == "caja abierta" ? 'badge-success' : 'badge-danger'}}">{{$caja}}</span>
+                    </div>
                     <button class="btn-info-menu">
                         <span class="material-icons">search</span>
                     </button>

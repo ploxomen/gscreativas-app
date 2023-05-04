@@ -114,6 +114,10 @@ function loadPage(){
         idUsuario = null;
         btnGuardar.querySelector("span").textContent = "Guardar";
     });
+    $('#usuarioRestaurar').on('hidden.bs.modal', function (event) {
+        idUsuario = null;
+        document.querySelector("#id_password_temp").value = document.querySelector("#id_password_temp").dataset.value;
+    });
     const boxContrasena = document.querySelector("#boxContrasena");
     tablaUsuarios.onclick = async function(e){
         if (e.target.classList.contains("btn-outline-info")){
@@ -155,7 +159,8 @@ function loadPage(){
             }
         }
         if (e.target.classList.contains("btn-outline-primary")) {
-            
+            idUsuario = e.target.dataset.usuario;
+            $('#usuarioRestaurar').modal("show");
         }
         if (e.target.classList.contains("btn-outline-danger")) {
             alertify.confirm("Alerta","¿Estás seguro de eliminar a este usuario?",async ()=>{
@@ -179,6 +184,30 @@ function loadPage(){
             },()=>{});
         }
     }
+    const btnGuardarRestaura = document.querySelector("#btnGuardarFrmRest"); 
+    btnGuardarRestaura.onclick = e => document.querySelector("#btnSubmitRest").click();
+    document.querySelector("#formRestaurar").addEventListener("submit",async function(e){
+        e.preventDefault();
+        let datos = new FormData(this);
+        datos.append("usuario",idUsuario);
+        try {
+            gen.cargandoPeticion(btnGuardarRestaura, gen.claseSpinner, true);
+            const response = await gen.funcfetch("usuarios/password", datos);
+            if (response.session) {
+                return alertify.alert([...gen.alertaSesion], () => { window.location.reload() });
+            }
+            if(response.success){
+                alertify.success(response.success);
+                $('#usuarioRestaurar').modal("hide");
+                tablaUsuariosData.draw();
+            }
+        } catch (error) {
+            console.error(error);
+            alertify.error("error al restaurar la contraseña del usuario");
+        }finally{
+            gen.cargandoPeticion(btnGuardarRestaura, 'fas fa-save', false);
+        }
+    })
     $('#cbArea, #cbRol').on("change",function(e){
         tablaUsuariosData.draw();
     });
