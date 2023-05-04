@@ -7,6 +7,7 @@ use App\Http\Controllers\Usuario;
 use App\Http\Controllers\Ventas\Comprobantes as VentasComprobantes;
 use App\Models\Clientes;
 use App\Models\Comprobantes;
+use App\Models\Configuracion;
 use App\Models\Perecedero;
 use App\Models\Productos;
 use App\Models\TipoDocumento;
@@ -101,7 +102,8 @@ class Ventas extends Controller
         $customPaper = array(0, 0, 867.00, 283.80);
         $ventas = ModelsVentas::find($venta);
         $ventas->detalleVentas = VentaDetalle::detalleVenta(intval($venta));
-        return Pdf::loadView("intranet.ventas.reportes.comprobanteVenta",compact("ventas"))->setPaper($customPaper, "landscape")->stream();
+        $configuracion = Configuracion::all();
+        return Pdf::loadView("intranet.ventas.reportes.comprobanteVenta",compact("ventas","configuracion"))->setPaper($customPaper, "landscape")->stream();
     }
     public function registrarVenta(Request $request, VentasComprobantes $comprobanteVenta)
     {

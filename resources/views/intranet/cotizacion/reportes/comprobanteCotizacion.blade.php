@@ -26,7 +26,7 @@
     <table style="margin-bottom: 30px;">
         <tr>
             <td>
-                <b class="text-logo">TIENDA LUCERO</b>
+                <b class="text-logo">{{$configuracion[0]->valor}}</b>
             </td>
             <td rowspan="6" style="text-align: center;">
                 <p><b class="text-logo">COTIZACIÓN</b></p>
@@ -38,21 +38,24 @@
         <tr>
             <td>
                 <p>
-                    <b>Dirección:</b>
-                    <span>AV. los girasoles 151 - Carabayllo</span>
+                    <b>RUC:</b>
+                    <span>{{$configuracion[1]->valor}}</span>
                 </p>
             </td>
         </tr>
         <tr>
             <td>
-                <p>Lima. Lima - Carabayllo</p>
+                <p>
+                    <b>Dirección:</b>
+                    <span>{{$configuracion[6]->valor}}</span>
+                </p>
             </td>
         </tr>
         <tr>
             <td>
                 <p>
                     <b>Correo:</b>
-                    <span>micorreodecompañia@gmail.com</span>
+                    <span>{{$configuracion[4]->valor}}</span>
                 </p>
             </td>
         </tr>
@@ -60,7 +63,7 @@
             <td>
                 <p>
                     <b>Teléfono:</b>
-                    <span>01 5145155</span>
+                    <span>{{$configuracion[3]->valor}}</span>
                 </p>
             </td>
         </tr>
@@ -68,7 +71,7 @@
             <td>
                 <p>
                     <b>Celular:</b>
-                    <span>+51 999999999</span>
+                    <span>{{$configuracion[2]->valor}}</span>
                 </p>
             </td>
         </tr>

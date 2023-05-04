@@ -56,6 +56,12 @@ function loadPage(){
                     Editar
                     </small>
                 </button>
+                <button class="btn btn-sm btn-outline-primary p-1" data-usuario="${data}">
+                    <small>
+                    <i class="fas fa-unlock-alt"></i>
+                    Restaurar
+                    </small>
+                </button>
                 <button class="btn btn-sm btn-outline-danger p-1" data-usuario="${data}">
                     <small>    
                     <i class="fas fa-trash-alt"></i>
@@ -147,6 +153,9 @@ function loadPage(){
                 console.error(error);
                 alertify.error("error al obtener el usuario");
             }
+        }
+        if (e.target.classList.contains("btn-outline-primary")) {
+            
         }
         if (e.target.classList.contains("btn-outline-danger")) {
             alertify.confirm("Alerta","¿Estás seguro de eliminar a este usuario?",async ()=>{

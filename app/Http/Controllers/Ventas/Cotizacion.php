@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Ventas;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Usuario;
+use App\Models\Configuracion;
 use App\Models\Cotizacion as ModelsCotizacion;
 use App\Models\CotizacionDetalle;
 use App\Models\Productos;
@@ -47,7 +48,8 @@ class Cotizacion extends Controller
         if (isset($verif['session'])) {
             return redirect()->route("home");
         }
-        return Pdf::loadView("intranet.cotizacion.reportes.comprobanteCotizacion", compact("cotizacion"))->stream();
+        $configuracion = Configuracion::all();
+        return Pdf::loadView("intranet.cotizacion.reportes.comprobanteCotizacion", compact("cotizacion","configuracion"))->stream();
     }
     public function verCotizacionesAdminIndex()
     {
