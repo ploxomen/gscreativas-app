@@ -156,6 +156,7 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
     });
     Route::prefix('caja')->group(function () {
         Route::get('nueva', [Caja::class, 'indexAbrirCaja'])->name("admin.caja.abrir");
+        Route::post('abrir', [Caja::class, 'abrirCaja']);
     });
     Route::prefix('usuarios')->group(function(){
         Route::post('accion',[Usuario::class,'getArea']);

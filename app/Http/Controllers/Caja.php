@@ -13,6 +13,17 @@ class Caja extends Controller
     {
         $this->usuarioController = new Usuario();
     }
+    public function abrirCaja()
+    {
+        $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloAbrirCaja);
+        if(isset($verif['session'])){
+            return response()->json(['session' => true]); 
+        }
+        // dd("prueba");
+        $fechaActual = date("Y-m-d");
+        
+
+    }
     public function indexAbrirCaja()
     {
         $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloAbrirCaja);

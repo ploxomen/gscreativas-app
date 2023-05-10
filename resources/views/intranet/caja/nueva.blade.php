@@ -1,6 +1,7 @@
 @extends('general.index')
 @section('head')
     <script src="{{asset('asset/general.js')}}"></script>
+    <script src="{{asset('asset/ventas/caja.js')}}"></script>
     <title>Caja</title>
 @endsection
 @section('body')
@@ -18,7 +19,7 @@
                     </div>
                     <div class="form-group text-center">
                         @if(empty($caja))
-                            <button class="btn btn-lg btn-success">
+                            <button class="btn btn-lg btn-success" id="btnAbrirCaja">
                                 <i class="fas fa-door-open"></i>
                                 <span>Abrir Caja</span>
                             </button>
