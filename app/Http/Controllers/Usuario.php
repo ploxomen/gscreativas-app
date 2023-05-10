@@ -33,7 +33,8 @@ class Usuario extends Controller
     public function miPerfil() : View
     {
         $modulos = $this->obtenerModulos();
-        return view("intranet.users.miPerfil",compact("modulos"));
+        $tiposDocumentos = TipoDocumento::where('estado', 1)->get();
+        return view("intranet.users.miPerfil",compact("modulos", "tiposDocumentos"));
     }
     public function actualizarPerfil(Request $request, MisProductos $productController)
     {

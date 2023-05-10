@@ -17,6 +17,7 @@ class CreateVentasTable extends Migration
             $table->id();
             $table->date("fechaVenta");
             $table->unsignedBigInteger("tipoComprobanteFk");
+            $table->unsignedBigInteger("cajaFk")->nullable();
             $table->string("serieComprobante");
             $table->string("numeroComprobante");
             $table->unsignedBigInteger("clienteFk");
@@ -39,6 +40,7 @@ class CreateVentasTable extends Migration
             $table->dateTimeTz("fechaActualizada");
             $table->foreign("tipoComprobanteFk")->references("id")->on("comprobantes");
             $table->foreign("clienteFk")->references("id")->on("clientes");
+            $table->foreign("cajaFk")->references("id")->on("caja");
         });
     }
 

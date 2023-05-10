@@ -18,12 +18,12 @@ class CreateCajaTable extends Migration
             $table->unsignedBigInteger("usuarioFk");
             $table->date("fecha_caja");
             $table->dateTimeTz("fecha_hr_inicio");
-            $table->dateTimeTz("fecha_hr_termino");
-            $table->decimal("importe_total");
-            $table->decimal("igv_total")->nullable();
-            $table->decimal("envio_total")->nullable();
-            $table->decimal("descuento_total")->nullable();
-            $table->decimal("total");
+            $table->dateTimeTz("fecha_hr_termino")->nullable();
+            $table->decimal("importe_total")->nullable()->default(0);
+            $table->decimal("igv_total")->nullable()->default(0);
+            $table->decimal("envio_total")->nullable()->default(0);
+            $table->decimal("descuento_total")->nullable()->default(0);
+            $table->decimal("total")->nullable()->default(0);
             $table->foreign("usuarioFk")->references("id")->on("usuarios");
 
         });

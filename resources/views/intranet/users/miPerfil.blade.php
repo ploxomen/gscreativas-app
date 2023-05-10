@@ -36,10 +36,9 @@
                     </label>
                     <select name="tipoDocumento" id="idTipoDocumento" class="form-control select2-simple">
                         <option value="">Ninguno</option>
-                        <option value="D.N.I" {{auth()->user()->tipoDocumento == "D.N.I" ? "selected" : ""}}>D.N.I</option>
-                        <option value="CARNET DE EXTRANJERÍA" {{auth()->user()->tipoDocumento == "CARNET DE EXTRANJERÍA" ? "selected" : ""}}>CARNET DE EXTRANJERÍA</option>
-                        <option value="PASAPORTE" {{auth()->user()->tipoDocumento == "PASAPORTE" ? "selected" : ""}}>PASAPORTE</option>
-                        <option value="R.U.C" {{auth()->user()->tipoDocumento == "R.U.C" ? "selected" : ""}}>R.U.C</option>
+                        @foreach ($tiposDocumentos as $tipoDocumento)
+                            <option value="{{$tipoDocumento->id}}" {{$tipoDocumento->id == auth()->user()->tipoDocumento ? 'selected' : ''}}>{{$tipoDocumento->documento}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="form-group col-12 col-md-6 mt-md-5">

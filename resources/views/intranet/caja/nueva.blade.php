@@ -24,14 +24,20 @@
                                 <span>Abrir Caja</span>
                             </button>
                         @endif
-                        @if (!empty($caja) && !is_null($caja->fecha_hr_inicio))
-                            <button class="btn btn-lg btn-danger">
+                        @if (!empty($caja) && !is_null($caja->fecha_hr_inicio) && is_null($caja->fecha_hr_termino))
+                            <button class="btn btn-lg btn-danger" id="btnCerrarCaja">
                                 <i class="fas fa-door-closed"></i>
                                 <span>Cerrar caja</span>
                             </button>
                         @endif
                         @if (!empty($caja) && !is_null($caja->fecha_hr_inicio) && !is_null($caja->fecha_hr_termino))
-                            <h5 class="text-center">La caja a sido cerrada</h5>
+                            <h5 class="text-center text-danger">La caja a sido cerrada</h5>
+                            <h5 class="text-center text-success">Venta total</h5>
+                            <h4 class="text-center text-success">S/. {{number_format($caja->total,2,'.',',')}}</h4>
+                            <button class="btn btn-lg btn-success" id="btnAbrirCaja">
+                                <i class="fas fa-door-open"></i>
+                                <span>Abrir Caja</span>
+                            </button>
                         @endif
                     </div>
         </div>
