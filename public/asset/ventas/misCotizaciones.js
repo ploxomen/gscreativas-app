@@ -74,6 +74,12 @@ function loadPage() {
                     Comprobante
                     </small>
                 </a>
+                <button class="btn btn-sm btn-outline-info p-1" data-venta="${data}">
+                    <small>    
+                    <i class="fas fa-pencil"></i>
+                        Editar
+                    </small>
+                </button>
                 <button class="btn btn-sm btn-outline-danger p-1" data-venta="${data}">
                     <small>    
                     <i class="fas fa-trash-alt"></i>

@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Producto\MisProductos;
 use App\Models\Area;
+use App\Models\Clientes;
+use App\Models\Compras;
+use App\Models\Productos;
 use App\Models\Rol;
 use App\Models\TipoDocumento;
 use App\Models\User;
 use App\Models\UsuarioRol;
+use App\Models\Ventas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Yajra\DataTables\Facades\DataTables;
@@ -23,7 +28,40 @@ class Usuario extends Controller
     public function index(): View
     {
         $modulos = $this->obtenerModulos();
-        return view("intranet.home",compact("modulos"));
+        $roles = User::find(Auth::id())->roles()->where(['activo' => 1])->first();
+        switch ($roles->id) {
+            case 1:
+                $ventasDia = Ventas::ingresosDelDia();
+                $ventasMes = Ventas::ingresosDelMes();
+                $totalClientes = Clientes::where('estado',1)->count();
+                $comprasMes = Compras::comprasMes();
+                return view("intranet.home.administrador", compact("modulos","ventasDia","ventasMes","totalClientes","comprasMes"));
+            break;
+            default:
+                return view("intranet.home.defecto", compact("modulos"));
+            break;
+        }
+    }
+    public function inicioAdministrador(Request $request)
+    {
+        $accessModulo = $this->validarXmlHttpRequest($this->moduloUsuario);
+        if(isset($accessModulo['session'])){
+            return response()->json($accessModulo);
+        }
+        switch ($request->accion) {
+            case 'ver-ventas-anio':
+                $ventas = Ventas::ventasAnio($request->anio);
+                return response()->json(['ventas' => $ventas]);
+            break;
+            case 'ver-productos-anio':
+                $productos = Productos::productosMasVendidos(5);
+                return response()->json(['productos' => $productos]);
+            break;
+            case 'ver-perecedero':
+                $productos = Productos::productosPorVencer();
+                return response()->json(['productos' => $productos]);
+            break;
+        }
     }
     public function agregarUsuario()
     {
@@ -164,7 +202,7 @@ class Usuario extends Controller
         $tiposDocumentos = TipoDocumento::where('estado',1)->get();
         return view('intranet.users.lista',compact("roles","areas","modulos","tiposDocumentos"));
     }
-    public function retaurarContra() : View
+    public function retaurarContra() : View | Redirect
     {
         if (isset($_COOKIE['login_first'])) {
             return view('cambioContra');
@@ -215,7 +253,7 @@ class Usuario extends Controller
         }else{
             $rol = $roles->roles()->where('activo',1)->first();
         }
-        return Rol::find($rol->id)->modulos()->orderBy('grupoFk')->get();
+        return Rol::find($rol->id)->modulos()->orderBy('grupoFk')->orderBy("id")->get();
     }
     public function validarXmlHttpRequest($urlModulo)
     {

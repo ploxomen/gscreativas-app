@@ -16,6 +16,10 @@ class Compras extends Model
     {
         return $this->belongsToMany(Productos::class, 'compras_detalle', 'compraFk', 'productoFk')->withTimestamps()->withPivot("cantidad","precio","importe");
     }
+    public function scopeComprasMes($query)
+    {
+        return $query->where('estado', 1)->whereYear('fechaComprobante', date('Y'))->whereMonth('fechaComprobante', date('m'))->sum('total');
+    }
     public function proveedor()
     {
         return $this->belongsTo(Proveedores::class, 'proveedorFk');

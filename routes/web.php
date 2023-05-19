@@ -33,7 +33,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth')->prefix('intranet')->group(function(){
-    Route::get('inicio', [Usuario::class, 'index'])->name('home');
+    Route::prefix('inicio')->group(function () {
+        Route::get('/', [Usuario::class, 'index'])->name('home');
+        Route::post('administrador', [Usuario::class, 'inicioAdministrador']);
+    });
     Route::prefix('almacen')->group(function () {
         Route::prefix('marca')->group(function () {
             Route::get('/', [Marca::class, 'index'])->name('admin.marca.index');
@@ -124,6 +127,7 @@ Route::middleware('auth')->prefix('intranet')->group(function(){
             Route::post('listar', [Ventas::class, 'listaMisVentas']);
             Route::get('listar/{venta}', [Ventas::class, 'verVentasParaEditar']);
             Route::post('listar/producto/{producto}', [Ventas::class, 'verProductoMisVentas']);
+            Route::delete('eliminar/{venta}', [Ventas::class, 'eliminarVenta']);
         });
         Route::get('registrar', [Ventas::class, 'indexRegistroVentas'])->name('ventas.registrar.index');
         Route::get('comprobante/{venta}', [Ventas::class, 'verComprobanteVenta']);

@@ -10,7 +10,8 @@ function loadPage(){
             method: 'POST',
             headers: general.requestJson
         },
-        columns: [{
+        columns: [
+        {
             data: 'id',
             render: function(data,type,row, meta){
                 return meta.row + 1;

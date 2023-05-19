@@ -176,6 +176,15 @@ class Ventas extends Controller
         $ventas->detalleVentas = VentaDetalle::detalleVenta(intval($venta));
         return response()->json(['venta' => $ventas]);
     }
+    public function eliminarVenta(ModelsVentas $venta)
+    {
+        $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloMisVentas);
+        if (isset($verif['session'])) {
+            return response()->json(['session' => true]);
+        }
+        $venta->update(['estado' => 0]);
+        return response()->json(['success' => 'venta eliminada correctamente']);
+    }
     public function verProductoMisVentas(Productos $producto)
     {
         $verif = $this->usuarioController->validarXmlHttpRequest($this->moduloMisVentas);

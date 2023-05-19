@@ -79,4 +79,8 @@ class General{
             currency: "PEN"
         })
     }
+    obtenerNombresMes(numeroMes) {
+        const mes = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Setiembre','Octubre','Noviembre','Diciembre'];
+        return mes[numeroMes - 1];
+    }
 }

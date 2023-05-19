@@ -23,4 +23,5 @@ class Clientes extends Model
     {
         return $this->hasMany(Ventas::class, 'clienteFk');
     }
+    
 }

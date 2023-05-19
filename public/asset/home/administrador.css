@@ -1,0 +1,65 @@
+.carta {
+    position: relative;
+    background: var(--color-secundario);
+    padding: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+}
+
+.carta .indicador {
+    display: block;
+    width: 6px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+}
+.color1 .material-icons{
+    color:#3F80EA !important;
+    background-color: rgba(176, 194, 222, 0.503) !important;
+}
+.color1 .indicador{
+    background-color: #3F80EA !important;
+}
+.color2 .indicador{
+    background-color: #ea3f3f !important;
+}
+.color2 .material-icons{
+    color: #ea3f3f !important;
+    background-color: rgba(230, 163, 163, 0.503) !important;
+}
+.color3 .indicador{
+    background-color: #bbea3f !important;
+}
+.color3 .material-icons{
+    color: #bbea3f !important;
+    background-color: rgba(211, 229, 155, 0.503) !important;
+}
+.color4 .indicador{
+    background-color: #eaba3f !important;
+}
+.color4 .material-icons{
+    color: #eaba3f !important;
+    background-color: rgba(223, 200, 137, 0.503) !important;
+}
+.carta .principal .tipo {
+    font-size: 0.8rem;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.carta .icono .material-icons {
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.carta .principal .valor {
+    color: var(--color-letra-title);
+}
+
+.graficos {
+    width: 100%;
+    min-height: 350px !important;
+}

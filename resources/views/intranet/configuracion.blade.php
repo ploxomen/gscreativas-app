@@ -1,7 +1,6 @@
 @extends('general.index')
 @section('head')
     <script src="{{asset('asset/general.js')}}"></script>
-    {{-- <link rel="stylesheet" href="{{asset('asset/productos/pestilos.css')}}"> --}}
     <script src="{{asset('asset/configuracion/miNegocio.js')}}"></script>
     <title>Configurar negocio</title>
 @endsection
