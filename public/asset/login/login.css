@@ -1,0 +1,78 @@
+body {
+    background-image: url('fondo-login.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+body:before {
+	content:'';
+	position: absolute;
+        top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: rgba(0, 57, 106, 0.833);
+}
+
+.login {
+    z-index: 1;
+}
+
+.formulario {
+    background: #fff;
+    padding-top: 2rem;
+    padding: 3rem 2.5rem;
+    padding-bottom: 4rem;
+    border-radius: .3rem;
+}
+
+@media (min-width: 768px) {
+    .formulario {
+        padding: 3rem 3rem;
+    }
+}
+
+.logo {
+    margin-top: -1rem;
+    text-align: center;
+}
+
+.logo img {
+    width: 20rem;
+}
+
+.btn-acceder {
+    background-color: #02427E;
+    border-color: #02427E;
+    color: #fff;
+}
+
+.btn-acceder:hover {
+    background-color: #002f5a;
+    border-color: #002f5a;
+    color: #fff;
+}
+
+.form-control:focus {
+    border-color: rgba(4, 79, 154, 0.5);;
+    box-shadow: 0 0 0 0.25rem rgba(168, 92, 0, 0.027);
+}
+
+.titulo {
+    font-weight: bold;
+}
+
+.enlace-olvide {
+    color: #4A4A4A;
+    text-decoration: underline;
+}
+
+.enlace-olvide:hover {
+    color: #4A4A4A;
+}

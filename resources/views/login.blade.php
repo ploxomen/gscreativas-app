@@ -11,58 +11,46 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
     <link rel="stylesheet" href="{{asset('asset/general.css')}}">
-    <link rel="stylesheet" href="{{asset('asset/login/lestilos.css')}}">
     <link rel="stylesheet" href="{{asset('library/alertify/alertify.min.css')}}">
+    <link rel="stylesheet" href="{{asset('library/bootstrap/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('asset/login/login.css')}}">
     <script src="{{asset('library/alertify/alertify.min.js')}}"></script>
     <script src="{{asset('asset/auth/home.css')}}"></script>
+    <link rel="icon" href="/asset/login/logo-intelecta.png">
     <script src="{{asset('asset/general.js')}}"></script>
-    <meta name="csrf-token" content="{{csrf_token()}}">
     <script src="{{asset('asset/auth/login.js')}}"></script>
     <title>Iniciar sesión</title>
 </head>
 <body>
-    <section class="contenido-login">
-        <article class="baner-log">
-            <div class="system-info">
-                <h3>Sistema integrado</h3>
-                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus modi pariatur unde molestias quo cumque illo et. Corrupti, eius qui quidem animi ad excepturi eveniet asperiores, sit commodi suscipit ea.</p>
-            </div>
-            <img src="{{asset('asset/img/log.svg')}}" alt="">
-        </article>
-        <article class="baner-init">
-            <form class="children" id="frmLogin">
-                <h1 class="title">Inicar sesión</h1>
-                <div class="box-input">
-                    <div class="input-file">
-                        <input type="email" name="correo" required placeholder="Usuario">
-                        <span class="material-icons">person</span>                    
-                    </div>
-                    <div class="input-file">
-                        <input type="password" name="password" required placeholder="Contraseña">
-                        <span class="material-icons">lock</span>
-                    </div>
-                    <div class="input-file">
-                        <label for="id-recordar" class="checkbox">
-                            <input type="checkbox" name="recordar" id="id-recordar" class="input-check">
-                            <div class="icon">
-                               <span class="material-icons">check</span>
-                            </div>
-                            <div><b>Recordarme</b></div> 
-                        </label>
-                    </div>
-                    <div class="input-file" style="text-align: right;">
-                        <a class="restore-pass">¿Olvidaste tu contraseña?</a>
-                    </div>
-                    <div>
-                        <button type="submit" class="button-login">
-                            <span class="material-icons">login</span>
-                            Ingresar
-                        </button>
-                    </div>
+    <div class="container login">
+        <div class="row justify-content-center">
+            <div class="col-10 col-md-5 col-lg-5 formulario">
+                <div class="mb-3 logo">
+                    <img src="/asset/login/logo-intelecta.png" alt="" class="img-fluid">
                 </div>
-            </form>
-        </article>
-    </section>
-    
+
+                <div class="mb-4 text-center">
+                    <h2 class="titulo">Iniciar Sesión</h2>
+                    <p>Ingresa a la Plataforma Virtual</p>
+                </div>
+                <form id="frmLogin">
+                    <div class="mb-3">
+                      <label for="txtCorreo" class="form-label">Usuario</label>
+                      <input type="email" name="correo" required class="form-control form-control-lg" id="txtCorreo">                      
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="txtContra" class="form-label">Contraseña</label>
+                      <input type="password" name="password" required class="form-control form-control-lg" id="txtContra">
+                    </div>
+                    <div class="mb-3 custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" name="recordar" id="id-recordar">
+                        <label class="custom-control-label" for="id-recordar">Recordarme</label>
+                      </div>
+                    <button type="submit" class="btn w-100 btn-acceder btn-lg">Acceder</button>
+                  </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

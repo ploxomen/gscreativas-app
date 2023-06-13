@@ -18,7 +18,6 @@
     <script src="{{asset('library/jquery/external/jquery/jquery.js')}}"></script>
     <script src="{{asset('library/bootstrap/bootstrap.min.js')}}"></script>
     <link rel="stylesheet" href="{{asset('asset/cambioContrasena.css')}}">
-
     <script src="{{asset('asset/auth/restaurar.js')}}"></script>
     <title>Restaurar Contraseña</title>
 </head>
